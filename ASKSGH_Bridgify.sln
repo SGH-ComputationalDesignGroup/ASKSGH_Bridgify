@@ -10,6 +10,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sSAP17System", "sSAP17System\sSAP17System.csproj", "{AF4A90F8-0363-4884-BBE3-3C60F04424AF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sWebObject", "sWebObject", "{6EE348C4-ADD0-4C02-82C9-8C99603FFAF0}"
+	ProjectSection(SolutionItems) = preProject
+		sWebObject.js = sWebObject.js
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sDataObject", "sDataObject\sDataObject.csproj", "{D4E62E01-1E39-4439-B760-3373EBED2C34}"
 EndProject
