@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FFBD40B3-32E9-4048-955F-BCE28F795CC0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>sRhinoSystem</RootNamespace>
+    <AssemblyName>sRhinoSystem</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GH_IO">
+      <HintPath>dotNetLibs\GH_IO.dll</HintPath>
+    </Reference>
+    <Reference Include="Grasshopper">
+      <HintPath>dotNetLibs\Grasshopper.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="RhinoCommon">
+      <HintPath>..\..\..\..\..\..\Program Files\Rhinoceros 5.0 (64-bit)\System\RhinoCommon.dll</HintPath>
+    </Reference>
+    <Reference Include="sDataObject, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\AppData\Roaming\Grasshopper\Libraries\sDataObject.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="GH\sUtility\TributaryArea_Lines.cs" />
+    <Compile Include="GH\sUtility\TributaryArea_Points.cs" />
+    <Compile Include="GH\To_RhinoSystem\To_RhinoBrep.cs" />
+    <Compile Include="GH\To_RhinoSystem\To_RhinoCurve.cs" />
+    <Compile Include="GH\To_RhinoSystem\To_RhinoMeshAppended.cs" />
+    <Compile Include="GH\To_RhinoSystem\To_RhinoBeamResults.cs" />
+    <Compile Include="GH\To_RhinoSystem\To_RhinoPointsPL.cs" />
+    <Compile Include="GH\To_RhinoSystem\To_RhinoSystemColorMesh.cs" />
+    <Compile Include="GH\To_RhinoSystem\To_RhinoLines.cs" />
+    <Compile Include="GH\To_RhinoSystem\To_RhinoPointsPS.cs" />
+    <Compile Include="GH\To_RhinoSystem\Load_sSystem.cs" />
+    <Compile Include="GH\To_sSystem\sBeamGroupByCrossSection.cs" />
+    <Compile Include="GH\To_sSystem\SplitSegmentize.cs" />
+    <Compile Include="GH\To_sSystem\Set_sBeamFixity.cs" />
+    <Compile Include="GH\To_sSystem\Set_sBeamUpVectorByBrep.cs" />
+    <Compile Include="GH\To_sSystem\sPointLoadGroupByPattern.cs" />
+    <Compile Include="GH\To_sSystem\sPointSupportGroupBySupportType.cs" />
+    <Compile Include="GH\To_sSystem\Set_AppendixMesh.cs" />
+    <Compile Include="GH\To_sSystem\sBeamGroupByName.cs" />
+    <Compile Include="GH\To_sSystem\To_sBeamSet.cs" />
+    <Compile Include="GH\To_sSystem\To_sSystemSettings.cs" />
+    <Compile Include="GH\To_sSystem\To_sLineLoad.cs" />
+    <Compile Include="GH\To_sSystem\To_sElements.cs" />
+    <Compile Include="GH\To_sSystem\To_sLoadCombination.cs" />
+    <Compile Include="GH\To_sSystem\To_sPointLoads.cs" />
+    <Compile Include="GH\To_sSystem\To_sPointSupports.cs" />
+    <Compile Include="GH\To_sSystem\Set_sBeamUpVector.cs" />
+    <Compile Include="GH\To_sSystem\To_sghSystem.cs" />
+    <Compile Include="GH\To_sSystem\Get_sRectangularSection.cs" />
+    <Compile Include="GH\To_sSystem\Get_sRoundSection.cs" />
+    <Compile Include="GH\To_sSystem\Get_sAISCSection.cs" />
+    <Compile Include="GH\To_sSystem\Get_sPresetMaterial.cs" />
+    <Compile Include="GH\To_sSystem\Get_sAISCName.cs" />
+    <Compile Include="GH\To_sSystem\Upload_sSystem.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="sRhinoConverter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\ToRhinoPoint.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\ToRhinoPoint.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\AppendixMesh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\ColorMesh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\ToRhinoCurve.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\downSystem.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\ToRhinoBrep.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\ToRhinoColorMesh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\AppendixMeshBox.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\TosBeam.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\lineLoad.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\PointLoad.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\pointSupport.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\combo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\upvector.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\upvector_ByBrep.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\setSystem.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\systemSetting.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\appendMesh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\groupByCS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\groupByName.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\groupBySupp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\ToElements.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\recSec.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\AISCSection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\AISCnames.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\materials.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\uploadSystem.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\roundSec.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\sfixity.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\setFixity.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\geosettings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\GetResults.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\tributary_point.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\tributary_line.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\ToRhinoLine.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\Split_Seg.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetPath)"  "C:\Users\jlee\AppData\Roaming\Grasshopper\Libraries\ASKSGHbridgify.gha"
+copy "$(TargetPath)"  "C:\Users\jlee\AppData\Roaming\Grasshopper\Libraries\sRhinoSystem.dll"</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
