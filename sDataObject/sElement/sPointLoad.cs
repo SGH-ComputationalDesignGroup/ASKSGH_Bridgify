@@ -53,19 +53,19 @@ namespace sDataObject.sElement
             if (this.momentVector != null) this.momentVector *= fac;
         }
 
-        public void GetRelaventBeams(sXYZ point, List<sBeam> beams, out sBeam beam0, out double cldis0, out sBeam beam1, out double cldis1)
+        public void GetRelaventBeams(sXYZ point, List<sFrame> beams, out sFrame beam0, out double cldis0, out sFrame beam1, out double cldis1)
         {
-            sBeam rb0 = null;
+            sFrame rb0 = null;
             double cdis0 = double.MaxValue;
-            sBeam rb1 = null;
+            sFrame rb1 = null;
             double cdis1 = double.MaxValue;
 
             sLine l0 = new sLine(point, point + (this.loadingDirection * 1000));
             sLine l1 = new sLine(point, point - (this.loadingDirection * 1000));
 
-            foreach (sBeam jb in beams)
+            foreach (sFrame jb in beams)
             {
-                if (jb.beamName.Contains(this.loadingBeamName))
+                if (jb.frameName.Contains(this.loadingBeamName))
                 {
                     sLine bax = jb.axis;
 

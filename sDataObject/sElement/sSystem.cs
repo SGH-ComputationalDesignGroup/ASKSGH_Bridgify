@@ -8,10 +8,10 @@ using Newtonsoft.Json;
 
 namespace sDataObject.sElement
 {
-    public class sSystem
+    public class sSystem : sElementBase
     {
         public List<sNode> nodes { get; set; }
-        public List<sBeamSet> beamSets { get; set; }
+        public List<sFrameSet> frameSets { get; set; }
         public List<sMesh> meshes { get; set; }
         public List<string> loadPatterns { get; set; }
         public List<sLoadCombination> loadCombinations { get; set; }
@@ -19,22 +19,90 @@ namespace sDataObject.sElement
         public double estimatedMaxD { get; set; }
         
         public sSystemSetting systemSettings { get; set; }
-
-
+        public sResultRange systemResults { get; set; }
+        
         public sSystem()
         {
             this.nodes = new List<sNode>();
-            this.beamSets = new List<sBeamSet>();
+            this.frameSets = new List<sFrameSet>();
             this.meshes = new List<sMesh>();
             this.loadPatterns = new List<string>();
             //this.loadPatterns.Add("DEAD"); // as default
             this.loadCombinations = new List<sLoadCombination>();
         }
 
-        public sBeamSet GetBeamSetByGUID(Guid gid)
+        public sSystem DuplicatesSystem()
         {
-            sBeamSet bs = null;
-            foreach (sBeamSet b in this.beamSets)
+            sSystem sys = new sSystem();
+
+            if(this.systemResults != null)
+            {
+                sys.systemResults = this.systemResults.DuplicatesResultRange();
+            }
+
+            sys.systemSettings = this.systemSettings.DuplicatesSystemSetting();
+            if (this.meshes != null && this.meshes.Count > 0)
+            {
+                sys.meshes = new List<sMesh>();
+                foreach (sMesh m in this.meshes)
+                {
+                    sys.meshes.Add(m.DuplicatesMesh());
+                }
+            }
+
+            if (this.frameSets != null)
+            {
+                sys.frameSets = new List<sFrameSet>();
+                foreach (sFrameSet bs in this.frameSets)
+                {
+                    sys.frameSets.Add(bs.DuplicatesFrameSet());
+                }
+            }
+
+            if (this.nodes != null)
+            {
+                sys.nodes = new List<sNode>();
+                foreach (sNode ns in this.nodes)
+                {
+                    sys.nodes.Add(ns.DuplicatesNode());
+                }
+            }
+
+            if (this.loadPatterns != null)
+            {
+                sys.loadPatterns = this.loadPatterns.ToList();
+            }
+
+            if (this.loadCombinations != null)
+            {
+                sys.loadCombinations = new List<sLoadCombination>();
+                foreach (sLoadCombination com in this.loadCombinations)
+                {
+                    sys.loadCombinations.Add(com.DuplicatesLoadCombination());
+                }
+            }
+
+            sys.estimatedMaxD = this.estimatedMaxD;
+            sys.estimatedWeight = this.estimatedWeight;
+
+            return sys;
+        }
+
+        public void AwaresSystemResult()
+        {
+            this.systemResults = new sResultRange();
+
+            foreach(sFrameSet fs in this.frameSets)
+            {
+                this.systemResults.UpdateMaxValues(fs.results_Max);
+            }
+            
+        }
+
+        public sFrameSet GetBeamSetByGUID(Guid gid)
+        {
+            sFrameSet bs = null;
+            foreach (sFrameSet b in this.frameSets)
             {
                 if (b.objectGUID.Equals(gid))
                 {
@@ -47,10 +115,10 @@ namespace sDataObject.sElement
 
         public void ResetBeamsInBeamSet()
         {
-            foreach(sBeamSet bs in this.beamSets)
+            foreach(sFrameSet bs in this.frameSets)
             {
-                bs.beams.Clear();
-                bs.beams = new List<sBeam>();
+                bs.frames.Clear();
+                bs.frames = new List<sFrame>();
             }
         }
         //node functions
@@ -117,10 +185,10 @@ namespace sDataObject.sElement
             }
         }
 
-        public void AddsBeamSet(sBeamSet bset)
+        public void AddsBeamSet(sFrameSet bset)
         {
             bset.EnsureBeamElement();
-            this.beamSets.Add(bset);
+            this.frameSets.Add(bset);
         }
 
         public List<sPointLoad> GetPointLoadsByCombo(sLoadCombination combo)
@@ -189,9 +257,9 @@ namespace sDataObject.sElement
             {
                 sRange resultRange = GetSystemBeamResultRange(colorMode);
 
-                foreach(sBeamSet bs in this.beamSets)
+                foreach(sFrameSet bs in this.frameSets)
                 {
-                    foreach (sBeam b in bs.beams)
+                    foreach (sFrame b in bs.frames)
                     {
                         sMesh sm = b.ConstructBeamColorMesh(resultRange, colorMode, threshold, du);
                         meshes.Add(sm);
@@ -202,9 +270,9 @@ namespace sDataObject.sElement
             }
             else
             {
-                foreach (sBeamSet bs in this.beamSets)
+                foreach (sFrameSet bs in this.frameSets)
                 {
-                    foreach (sBeam b in bs.beams)
+                    foreach (sFrame b in bs.frames)
                     {
                         sMesh sm = b.ConstructBeamColorMesh(new sRange(0.0, 0.0), colorMode, new sRange(0.0, 0.0), 0.0);
                         meshes.Add(sm);
@@ -220,9 +288,9 @@ namespace sDataObject.sElement
             double minV = double.MaxValue;
             double maxV = double.MinValue;
 
-            foreach (sBeamSet bs in this.beamSets)
+            foreach (sFrameSet bs in this.frameSets)
             {
-                foreach (sBeam b in bs.beams)
+                foreach (sFrame b in bs.frames)
                 {
                     sRange bRange = b.GetBeamResultRange(colorMode);
                     if (bRange.min < minV)
@@ -293,14 +361,25 @@ namespace sDataObject.sElement
             });
         }
 
-        public string Jsonify()
+        public string Jsonify(bool isForWeb = false)
         {
-            return JsonConvert.SerializeObject(this, Formatting.None, new JsonSerializerSettings
+            if (isForWeb)
             {
-                NullValueHandling = NullValueHandling.Ignore,
-                TypeNameHandling = TypeNameHandling.All,
-                TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
-            });
+                return JsonConvert.SerializeObject(this, Formatting.None, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                });
+            }
+            else
+            {
+                return JsonConvert.SerializeObject(this, Formatting.None, new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    TypeNameHandling = TypeNameHandling.All,
+                    TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
+                });
+            }
+            
         }
 
         

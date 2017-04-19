@@ -43,17 +43,17 @@ namespace sRhinoSystem.GH.To_sSystem
         protected override void SolveInstance(IGH_DataAccess DA)
         {
 
-            List<sBeamSet> beams = new List<sBeamSet>();
+            List<sFrameSet> beams = new List<sFrameSet>();
 
             if (!DA.GetDataList(0, beams)) return;
 
-                DataTree<sBeamSet> beamTree = new DataTree<sBeamSet>();
-                var grouped = beams.GroupBy(b => b.beamSetName);
+                DataTree<sFrameSet> beamTree = new DataTree<sFrameSet>();
+                var grouped = beams.GroupBy(b => b.frameSetName);
                 int groupID = 0;
                 foreach (var bgroup in grouped)
                 {
                     GH_Path bpth = new GH_Path(groupID);
-                    foreach (sBeamSet sb in bgroup)
+                    foreach (sFrameSet sb in bgroup)
                     {
                         beamTree.Add(sb, bpth);
                     }

@@ -335,14 +335,14 @@ namespace ASKSGH_Bridgify
             }
         }
 
-        private Dyn.BoundingBox ToDynamoBoundingBox(List<sObject> sobjs)
+        private Dyn.BoundingBox ToDynamoBoundingBox(List<IsObject> sobjs)
         {
             List<Dyn.Geometry> dygeos = new List<Autodesk.DesignScript.Geometry.Geometry>();
-            foreach(sObject so in sobjs)
+            foreach(IsObject so in sobjs)
             {
-                if(so is sBeam)
+                if(so is sFrame)
                 {
-                    sBeam sb = so as sBeam;
+                    sFrame sb = so as sFrame;
                     dygeos.Add(ToDynamoLine(sb.axis));
                 }
             }
@@ -350,7 +350,7 @@ namespace ASKSGH_Bridgify
             dygeos.Clear();
             return dbox;
         }
-        internal sBoundingBox TosBoundingBox(List<sObject> sobjs)
+        internal sBoundingBox TosBoundingBox(List<IsObject> sobjs)
         {
             return TosBoundingBox(ToDynamoBoundingBox(sobjs));
         }
@@ -582,11 +582,11 @@ namespace ASKSGH_Bridgify
             return sm;
         }
 
-        internal Dyn.Solid ToDynamoBeamPreview(sBeam sb)
+        internal Dyn.Solid ToDynamoBeamPreview(sFrame sb)
         {
             return Dyn.Solid.ByLoft(new Dyn.Curve[2] { ToRhinoCrosssectionProfile(sb, 0.0), ToRhinoCrosssectionProfile(sb, 1.0) });
         }
-        internal Dyn.PolyCurve ToRhinoCrosssectionProfile(sBeam sb, double t)
+        internal Dyn.PolyCurve ToRhinoCrosssectionProfile(sFrame sb, double t)
         {
             sCrossSection scs = sb.crossSection;
             List<sXYZ> vertice = new List<sXYZ>();

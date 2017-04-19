@@ -50,10 +50,10 @@
     <Compile Include="sBuildingElement\sbBeam.cs" />
     <Compile Include="sBuildingElement\sbBuilding.cs" />
     <Compile Include="sBuildingElement\sbFloor.cs" />
-    <Compile Include="sElement\sBeam.cs" />
-    <Compile Include="sElement\sBeamSetResult.cs" />
-    <Compile Include="sElement\sBeamSet.cs" />
-    <Compile Include="sElement\sBeamResult.cs" />
+    <Compile Include="sElement\sFrame.cs" />
+    <Compile Include="sElement\sResultRange.cs" />
+    <Compile Include="sElement\sFrameSet.cs" />
+    <Compile Include="sElement\sFrameResult.cs" />
     <Compile Include="sElement\sCrossSection.cs" />
     <Compile Include="sElement\sElementBase.cs" />
     <Compile Include="sElement\sTributaryArea.cs" />
@@ -81,7 +81,7 @@
     <Compile Include="sGeometry\sVertex.cs" />
     <Compile Include="sGeometry\sXYZ.cs" />
     <Compile Include="sJsonReceiver.cs" />
-    <Compile Include="sObject.cs" />
+    <Compile Include="IsObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace sDataObject.sElement
 {
-    public class sElementBase : sObject
+    public class sElementBase : IsObject
     {
         public Guid objectGUID { get; set; }
 

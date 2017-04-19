@@ -311,7 +311,7 @@ namespace ASKSGH_Bridgify
         public static object sBeamElement(string beamName, List<Dyn.Curve> beamLines, List<sCrossSection> crossSections)
         {
 
-            List<sBeam> beams = new List<sBeam>();
+            List<sFrame> beams = new List<sFrame>();
             
             sDynamoConverter dycon = new sDynamoConverter("Feet", "Meters");
 
@@ -325,9 +325,9 @@ namespace ASKSGH_Bridgify
                     sNode jn1 = new sNode();
                     jn1.location = dycon.TosXYZ((Dyn.Point)dycon.EnsureUnit(beamLines[i].EndPoint));
 
-                    sBeam jb = new sBeam(jn0, jn1, sXYZ.Zaxis());
-                    jb.beamName = beamName;
-                    jb.beamID = i;
+                    sFrame jb = new sFrame(jn0, jn1, sXYZ.Zaxis());
+                    jb.frameName = beamName;
+                    jb.frameID = i;
 
                     if (crossSections.Count == 1)
                     {
@@ -351,7 +351,7 @@ namespace ASKSGH_Bridgify
         public static object sBeamElement_Load(string beamName, List<Dyn.Curve> beamLines, List<sCrossSection> crossSections, List<object> lineLoads)
         {
 
-            List<sBeam> beams = new List<sBeam>();
+            List<sFrame> beams = new List<sFrame>();
 
             sDynamoConverter dycon = new sDynamoConverter("Feet", "Meters");
 
@@ -365,9 +365,9 @@ namespace ASKSGH_Bridgify
                     sNode jn1 = new sNode();
                     jn1.location = dycon.TosXYZ((Dyn.Point)dycon.EnsureUnit(beamLines[i].EndPoint));
 
-                    sBeam jb = new sBeam(jn0, jn1, sXYZ.Zaxis());
-                    jb.beamName = beamName;
-                    jb.beamID = i;
+                    sFrame jb = new sFrame(jn0, jn1, sXYZ.Zaxis());
+                    jb.frameName = beamName;
+                    jb.frameID = i;
 
                     if (crossSections.Count == 1)
                     {
@@ -657,7 +657,7 @@ namespace ASKSGH_Bridgify
             sSystem jsys = new sSystem();
             jsys.systemSettings = sysSet;
             jsys.geometrySettings = geoSet;
-            List<sObject> sobjs = new List<sObject>();
+            List<IsObject> sobjs = new List<IsObject>();
             sDynamoConverter dycon = new sDynamoConverter();
 
             jsys.loadPatterns.Add("DEAD");
@@ -667,10 +667,10 @@ namespace ASKSGH_Bridgify
 
             foreach (object so in sElements)
             {
-                sBeamSet sb = so as sBeamSet;
+                sFrameSet sb = so as sFrameSet;
                 if (sb != null)
                 {
-                    jsys.beamSets.Add(sb);
+                    jsys.frameSets.Add(sb);
                     sobjs.Add(sb);
 
                     if (sb.lineLoads != null)

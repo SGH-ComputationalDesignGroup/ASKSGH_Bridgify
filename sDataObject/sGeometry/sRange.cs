@@ -58,7 +58,7 @@ namespace sDataObject.sGeometry
         {
             if(this.min < 0.0 && this.max < 0.0)
             {
-                sRange newRn = new sRange(this.min, 0.0);
+                sRange newRn = new sRange(this.min, Math.Abs(this.min));
                 return newRn.GetNormalizedAt(value);
             }
             else if(this.min < 0.0 && this.max > 0.0)
@@ -69,7 +69,7 @@ namespace sDataObject.sGeometry
             }
             else if(this.min > 0.0 && this.max > 0.0)
             {
-                sRange newRn = new sRange(0.0, this.max);
+                sRange newRn = new sRange(-1 * Math.Abs(this.max), this.max);
                 return newRn.GetNormalizedAt(value);
             }
             else

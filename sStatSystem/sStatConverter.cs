@@ -16,7 +16,7 @@ namespace sNStatSystem
 
         }
 
-        public StatCrossSection ToStatCrossSection(sBeam jb)
+        public StatCrossSection ToStatCrossSection(sFrame jb)
         {
             StatCrossSection cs = null;
             StatMaterial mat = GetStatMaterial(jb);
@@ -64,7 +64,7 @@ namespace sNStatSystem
             return new sXYZ(cv.x, cv.y, cv.z);
         }
         
-        private StatMaterial GetStatMaterial(sBeam jb)
+        private StatMaterial GetStatMaterial(sFrame jb)
         {
             StatMaterial mat = null;
 
@@ -112,7 +112,7 @@ namespace sNStatSystem
             return mat;
         }
 
-        private StatCrossSection GetRoundCrossSection(sBeam jb, StatMaterial mat)
+        private StatCrossSection GetRoundCrossSection(sFrame jb, StatMaterial mat)
         {
             StatCrossSection cs = new StatCrossSection(jb.crossSection.shapeName, mat);
             
@@ -134,7 +134,7 @@ namespace sNStatSystem
             return cs;
         }
 
-        private StatCrossSection GetHSSRoundStatCrossSection(sBeam jb, StatMaterial mat)
+        private StatCrossSection GetHSSRoundStatCrossSection(sFrame jb, StatMaterial mat)
         {
             double od;
             double th;
@@ -158,7 +158,7 @@ namespace sNStatSystem
             return cs;
         }
 
-        private StatCrossSection GetSquareStatCrossSection(sBeam jb, StatMaterial mat)
+        private StatCrossSection GetSquareStatCrossSection(sFrame jb, StatMaterial mat)
         {
             StatCrossSection cs = new StatCrossSection(jb.crossSection.shapeName, mat);
             //currently cannot trust Millipede
@@ -199,7 +199,7 @@ namespace sNStatSystem
             return cs;
         }
 
-        private StatCrossSection GetRectangleStatCrossSection(sBeam jb, StatMaterial mat)
+        private StatCrossSection GetRectangleStatCrossSection(sFrame jb, StatMaterial mat)
         {
             StatCrossSection cs = new StatCrossSection(jb.crossSection.shapeName, mat);
             //currently cannot trust Millipede
@@ -270,7 +270,7 @@ namespace sNStatSystem
             //double jxx = ((((B * H) * ((B * B) + (H * H))) - ((b * h) * ((b * b) + (h * h)))) / 12.0);
         }
 
-        private StatCrossSection GetHSSRectangleStatCrossSection(sBeam jb, StatMaterial mat)
+        private StatCrossSection GetHSSRectangleStatCrossSection(sFrame jb, StatMaterial mat)
         {
             double w; ///list of variables
             double d;
@@ -300,7 +300,7 @@ namespace sNStatSystem
             return cs;
         }
 
-        private StatCrossSection GetWbeamStatCrossSection(sBeam jb, StatMaterial mat)
+        private StatCrossSection GetWbeamStatCrossSection(sFrame jb, StatMaterial mat)
         {
             double a;
             double tw;

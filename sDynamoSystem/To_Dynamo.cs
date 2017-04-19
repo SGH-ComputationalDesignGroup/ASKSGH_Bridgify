@@ -78,7 +78,7 @@ namespace ASKSGH_Bridgify
             List<object> obj4 = new List<object>();
             if (sghSystem != null)
             {
-               foreach(sBeam b in sghSystem.beamSets)
+               foreach(sFrame b in sghSystem.frameSets)
                 {
                     obj1.Add(b);
                 }
@@ -192,7 +192,7 @@ namespace ASKSGH_Bridgify
               };
         }
         [MultiReturn(new[] { "beamPreview"})]
-        public static object To_DynamoObj_sBeamPreview(sBeam beam)
+        public static object To_DynamoObj_sBeamPreview(sFrame beam)
         {
             sDynamoConverter dyncon = new sDynamoConverter("Meters","Feet");
             
@@ -202,14 +202,14 @@ namespace ASKSGH_Bridgify
             };
         }
         [MultiReturn(new[] { "beamName", "beamID", "beamLine",  "crossSection", "lineLoads" })]
-        public static object To_DynamoObj_sBeam(sBeam beam)
+        public static object To_DynamoObj_sBeam(sFrame beam)
         {
              sDynamoConverter dyncon = new sDynamoConverter("Meters","Feet");
 
             return new Dictionary<string, object>
             {
-                { "beamName", beam.beamName },
-                { "beamID", beam.beamID },
+                { "beamName", beam.frameName },
+                { "beamID", beam.frameID },
                 { "beamLine", dyncon.EnsureUnit(dyncon.ToDynamoLine(beam.axis)) },
                 { "crossSection", beam.crossSection },
                 { "lineLoads", beam.lineLoads }
@@ -230,16 +230,16 @@ namespace ASKSGH_Bridgify
         }
 
         [MultiReturn(new[] { "beamGroup", })]
-        public static object To_GroupBeam_ByName(List<sBeam> beams)
+        public static object To_GroupBeam_ByName(List<sFrame> beams)
         {
             sDynamoConverter dyncon = new sDynamoConverter("Meters", "Feet");
 
-            List<List<sBeam>> plGroup = new List<List<sBeam>>();
-            var grouped = beams.GroupBy(l => l.beamName);
+            List<List<sFrame>> plGroup = new List<List<sFrame>>();
+            var grouped = beams.GroupBy(l => l.frameName);
             foreach (var lgroup in grouped)
             {
-                List<sBeam> plList = new List<sBeam>();
-                foreach (sBeam pl in lgroup)
+                List<sFrame> plList = new List<sFrame>();
+                foreach (sFrame pl in lgroup)
                 {
                     plList.Add(pl);
                 }

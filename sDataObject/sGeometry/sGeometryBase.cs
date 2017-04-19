@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace sDataObject.sGeometry
 {
-    public class sGeometryBase : sObject
+    public class sGeometryBase : IsObject
     {
         public Guid objectGUID { get; set; }
 

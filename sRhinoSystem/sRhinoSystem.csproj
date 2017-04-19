@@ -43,10 +43,6 @@
     <Reference Include="RhinoCommon">
       <HintPath>..\..\..\..\..\..\Program Files\Rhinoceros 5.0 (64-bit)\System\RhinoCommon.dll</HintPath>
     </Reference>
-    <Reference Include="sDataObject, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\AppData\Roaming\Grasshopper\Libraries\sDataObject.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -61,6 +57,7 @@
   <ItemGroup>
     <Compile Include="GH\sUtility\TributaryArea_Lines.cs" />
     <Compile Include="GH\sUtility\TributaryArea_Points.cs" />
+    <Compile Include="GH\To_RhinoSystem\To_RhinoBeamSetResults.cs" />
     <Compile Include="GH\To_RhinoSystem\To_RhinoBrep.cs" />
     <Compile Include="GH\To_RhinoSystem\To_RhinoCurve.cs" />
     <Compile Include="GH\To_RhinoSystem\To_RhinoMeshAppended.cs" />
@@ -221,6 +218,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="GH\icons\Split_Seg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\sDataObject\sDataObject.csproj">
+      <Project>{d4e62e01-1e39-4439-b760-3373ebed2c34}</Project>
+      <Name>sDataObject</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -33,9 +33,6 @@
     <Reference Include="SAP2000v17">
       <HintPath>..\..\..\..\AppData\Roaming\Grasshopper\Libraries\SAP2000v17.dll</HintPath>
     </Reference>
-    <Reference Include="sDataObject">
-      <HintPath>..\..\..\..\AppData\Roaming\Grasshopper\Libraries\sDataObject.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -54,6 +51,12 @@
     <Compile Include="sSAPNode.cs" />
     <Compile Include="sSAPSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\sDataObject\sDataObject.csproj">
+      <Project>{d4e62e01-1e39-4439-b760-3373ebed2c34}</Project>
+      <Name>sDataObject</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

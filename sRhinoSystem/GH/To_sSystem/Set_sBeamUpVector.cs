@@ -44,7 +44,7 @@ namespace sRhinoSystem.GH.To_sSystem
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<sBeamSet> beamsets = new List<sBeamSet>();
+            List<sFrameSet> beamsets = new List<sFrameSet>();
             List<Vector3d> upvectors = new List<Vector3d>();
             
             if (!DA.GetDataList(0, beamsets)) return;
@@ -54,7 +54,7 @@ namespace sRhinoSystem.GH.To_sSystem
             sRhinoConverter rhcon = new sRhinoConverter(modelUnit, "Meters");
             sRhinoConverter rhcon_ToRhinoModel = new sRhinoConverter("Meters", modelUnit);
 
-            List<sBeamSet> duplicated = new List<sBeamSet>();
+            List<sFrameSet> duplicated = new List<sFrameSet>();
             List<Point3d> pts = new List<Point3d>();
             List<Vector3d> vecs = new List<Vector3d>();
 
@@ -64,13 +64,13 @@ namespace sRhinoSystem.GH.To_sSystem
             {
                 for (int i = 0; i < beamsets.Count; ++i)
                 {
-                    if (beamsets[i].beams.Count > 0)
+                    if (beamsets[i].frames.Count > 0)
                     {
                         sXYZ upvecThis = rhcon.TosXYZ(upvectors[i]);
-                        sBeamSet dubs = beamsets[i].DuplicatesBeamSet();
+                        sFrameSet dubs = beamsets[i].DuplicatesFrameSet();
                         dubs.EnsureBeamElement();
 
-                        foreach (sBeam sb in dubs.beams)
+                        foreach (sFrame sb in dubs.frames)
                         {
                             sb.AwareLocalPlane(upvecThis);
 
@@ -88,14 +88,14 @@ namespace sRhinoSystem.GH.To_sSystem
             }
             else if(upvectors.Count == 1)
             {
-                foreach (sBeamSet bs in beamsets)
+                foreach (sFrameSet bs in beamsets)
                 {
-                    if(bs.beams.Count > 0)
+                    if(bs.frames.Count > 0)
                     {
-                        sBeamSet dubs = bs.DuplicatesBeamSet();
+                        sFrameSet dubs = bs.DuplicatesFrameSet();
                         dubs.EnsureBeamElement();
 
-                        foreach (sBeam sb in dubs.beams)
+                        foreach (sFrame sb in dubs.frames)
                         {
                             sb.AwareLocalPlane(rhcon.TosXYZ(upvectors[0]));
 

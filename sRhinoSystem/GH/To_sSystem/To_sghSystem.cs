@@ -73,7 +73,7 @@ namespace sRhinoSystem.GH.To_sSystem
             {
                 sSystem jsys = new sSystem();
                 jsys.systemSettings = sysSetting;
-                List<sObject> sObjs = new List<sObject>();
+                List<IsObject> sObjs = new List<IsObject>();
 
                 jsys.loadPatterns.Add("DEAD");
 
@@ -86,7 +86,7 @@ namespace sRhinoSystem.GH.To_sSystem
                     {
                         GH_ObjectWrapper wap = new GH_ObjectWrapper(so);
 
-                        sBeamSet bs = wap.Value as sBeamSet;
+                        sFrameSet bs = wap.Value as sFrameSet;
                         if(bs != null)
                         {
                             //jsys.beamSets.Add(bs);

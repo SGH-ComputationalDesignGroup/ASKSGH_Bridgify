@@ -92,7 +92,7 @@ namespace sRhinoSystem.GH.ToRhinoSystem
         
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            sBeam sb = null;
+            sFrame sb = null;
 
             if (!DA.GetData(0, ref sb)) return;
 

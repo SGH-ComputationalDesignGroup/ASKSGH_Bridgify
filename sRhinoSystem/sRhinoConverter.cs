@@ -27,15 +27,15 @@ namespace sRhinoSystem
             this.targetUnit = targetU;
         }
 
-        private BoundingBox GetRhinoBoundingBox(List<sObject> objs)
+        private BoundingBox GetRhinoBoundingBox(List<IsObject> objs)
         {
             List<Point3d> pts = new List<Point3d>();
 
-            foreach(sObject so in objs)
+            foreach(IsObject so in objs)
             {
-                if(so is sBeamSet)
+                if(so is sFrameSet)
                 {
-                    sBeamSet sb = so as sBeamSet;
+                    sFrameSet sb = so as sFrameSet;
                     Curve rc = ToRhinoCurve(sb.parentCrv);
                     Point3d[] dpts;
                     rc.DivideByCount(3, true, out dpts);
@@ -55,7 +55,7 @@ namespace sRhinoSystem
             }
             return new BoundingBox(pts);
         }
-        public sBoundingBox TosBoundingBox(List<sObject> objs)
+        public sBoundingBox TosBoundingBox(List<IsObject> objs)
         {
             return TosBoundingBox(GetRhinoBoundingBox(objs));
         }
@@ -721,7 +721,7 @@ namespace sRhinoSystem
             return urn;
         }
 
-        public Brep ToRhinoBeamPreview(sBeam sb)
+        public Brep ToRhinoBeamPreview(sFrame sb)
         {
             Curve profileS = ToRhinoCrosssectionProfile(sb, 0.0);
             Curve profileE = ToRhinoCrosssectionProfile(sb, 1.0);
@@ -731,18 +731,18 @@ namespace sRhinoSystem
         }
 
         //?????????????
-        public List<Curve> ToRhinoCrosssectionProfile(sBeamSet bs, double lenTol)
+        public List<Curve> ToRhinoCrosssectionProfile(sFrameSet bs, double lenTol)
         {
             List<Curve> profiles = new List<Curve>();
 
-            for(int i = 0; i < bs.beams.Count; ++i)
+            for(int i = 0; i < bs.frames.Count; ++i)
             {
 
             }
 
             return profiles;
         }
-        public Curve ToRhinoCrosssectionProfile(sBeam sb, double t)
+        public Curve ToRhinoCrosssectionProfile(sFrame sb, double t)
         {
             sCrossSection scs = sb.crossSection;
             List<sXYZ> vertice = new List<sXYZ>();
@@ -1193,12 +1193,12 @@ namespace sRhinoSystem
         }
         
         //.....hate to put this here though....
-        public void SplitSegmentizesBeamSet(ref List<sBeamSet> beamset, double intTol, double segTol, List<object> pointEle = null)
+        public void SplitSegmentizesBeamSet(ref List<sFrameSet> beamset, double intTol, double segTol, List<object> pointEle = null)
         {
             List<Curve> allCrvs = new List<Curve>();
-            foreach (sBeamSet bs in beamset)
+            foreach (sFrameSet bs in beamset)
             {
-                bs.beams.Clear(); //??
+                bs.frames.Clear(); //??
                 allCrvs.Add(ToRhinoCurve(bs.parentCrv));
             }
 
@@ -1221,7 +1221,7 @@ namespace sRhinoSystem
             }
             if (pts.Count == 0) pts = null;
 
-            foreach (sBeamSet bs in beamset)
+            foreach (sFrameSet bs in beamset)
             {
                 Curve rc = ToRhinoCurve(bs.parentCrv);
                 int id = 0;
@@ -1273,11 +1273,11 @@ namespace sRhinoSystem
             }
         }
 
-        public void AwareBeamUpVectorsOnBrep(ref sBeamSet bSet, Brep guideBrep, double tol)
+        public void AwareBeamUpVectorsOnBrep(ref sFrameSet bSet, Brep guideBrep, double tol)
         {
-            if (bSet.beams.Count > 0)
+            if (bSet.frames.Count > 0)
             {
-                foreach (sBeam sb in bSet.beams)
+                foreach (sFrame sb in bSet.frames)
                 {
                     Point3d cp = ToRhinoPoint3d(sb.axis.PointAt(0.5));
                     Vector3d nv = GetNormalVectorAtPointOnBrep(cp, guideBrep, tol);

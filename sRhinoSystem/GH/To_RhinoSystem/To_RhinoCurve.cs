@@ -48,7 +48,7 @@ namespace sRhinoSystem.GH.ToRhinoSystem
         
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            sBeamSet bs = null;
+            sFrameSet bs = null;
 
             if (!DA.GetData(0, ref bs)) return;
 
@@ -65,10 +65,10 @@ namespace sRhinoSystem.GH.ToRhinoSystem
                 lls = rhcon.EnsureUnit(bs.lineLoads).ToList();
             }
 
-            DA.SetData(0, bs.beamSetName);
+            DA.SetData(0, bs.frameSetName);
             DA.SetData(1, rhcon.EnsureUnit( rhcon.ToRhinoCurve(bs.parentCrv)));
             DA.SetData(2, bs.crossSection);
-            DA.SetDataList(3, bs.beams);
+            DA.SetDataList(3, bs.frames);
             DA.SetDataList(4, lls);
             DA.SetDataList(5, fixs);
         }

@@ -142,7 +142,7 @@ namespace sRhinoSystem.GH.To_sSystem
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<sBeamSet> bsets = new List<sBeamSet>();
+            List<sFrameSet> bsets = new List<sFrameSet>();
             double tol = 0.005;
             if (!DA.GetDataList(0, bsets)) return;
             if (!DA.GetData(1, ref tol)) return;
@@ -202,13 +202,13 @@ namespace sRhinoSystem.GH.To_sSystem
 
             if (modelUnit == "Feet") tol = 0.015;
 
-            List<sBeamSet> duplicated = new List<sBeamSet>();
+            List<sFrameSet> duplicated = new List<sFrameSet>();
             List<Point3d> locsStart = new List<Point3d>();
             List<Point3d> locsEnd = new List<Point3d>();
 
-            foreach (sBeamSet bso in bsets)
+            foreach (sFrameSet bso in bsets)
             {
-                sBeamSet bs = bso.DuplicatesBeamSet();
+                sFrameSet bs = bso.DuplicatesFrameSet();
 
                 bs.ResetFixities();
 
@@ -264,9 +264,9 @@ namespace sRhinoSystem.GH.To_sSystem
                 duplicated.Add(bs);
             }
 
-            foreach(sBeamSet bs in duplicated)
+            foreach(sFrameSet bs in duplicated)
             {
-                if(bs.beams.Count == 0)
+                if(bs.frames.Count == 0)
                 {
                     Curve rc = rhcon_ToRhinoModel.EnsureUnit(rhcon.ToRhinoCurve(bs.parentCrv));
                     if (bs.parentFixityAtStart != null)
@@ -280,7 +280,7 @@ namespace sRhinoSystem.GH.To_sSystem
                 }
                 else
                 {
-                    foreach (sBeam sb in bs.beams)
+                    foreach (sFrame sb in bs.frames)
                     {
                         if (sb.fixityAtStart != null)
                         {

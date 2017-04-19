@@ -8,7 +8,7 @@ using sDataObject.sGeometry;
 
 namespace sDataObject.sBuildingElement
 {
-    public class sbBeam : sBeamSet
+    public class sbBeam : sFrameSet
     {
         public Guid sbBeamID { get; set; }
         

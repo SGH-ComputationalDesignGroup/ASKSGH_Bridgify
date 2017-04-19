@@ -55,7 +55,7 @@ namespace sRhinoSystem.GH.To_sSystem
             DA.GetDataList(3, lineLoadObjs);
 
 
-            List<sBeamSet> sets = new List<sBeamSet>();
+            List<sFrameSet> sets = new List<sFrameSet>();
 
             string modelUnit = Rhino.RhinoDoc.ActiveDoc.ModelUnitSystem.ToString();
             sRhinoConverter rhcon = new sRhinoConverter(modelUnit, "Meters");
@@ -68,8 +68,8 @@ namespace sRhinoSystem.GH.To_sSystem
                 {
                     Curve rc = rhcon.EnsureUnit(beamSetCurves[i]);
                     sCurve setCrv = rhcon.TosCurve(rc);
-                    sBeamSet bset = new sBeamSet(setCrv);
-                    bset.beamSetName = beamSetName;
+                    sFrameSet bset = new sFrameSet(setCrv);
+                    bset.frameSetName = beamSetName;
                     bset.setId = i;
 
                     if (crossSections.Count == 1)

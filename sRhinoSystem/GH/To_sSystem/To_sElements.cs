@@ -48,7 +48,7 @@ namespace sRhinoSystem.GH.To_sSystem
             
             if (!DA.GetData(0, ref ssys)) return;
 
-            List<sBeamSet> beams = new List<sBeamSet>();
+            List<sFrameSet> beams = new List<sFrameSet>();
             List<sPointSupport> sups = new List<sPointSupport>();
             List<sPointLoad> pls = new List<sPointLoad>();
 
@@ -56,7 +56,7 @@ namespace sRhinoSystem.GH.To_sSystem
             {
                 sSystem sys = ssys as sSystem;
 
-                foreach (sBeamSet b in sys.beamSets)
+                foreach (sFrameSet b in sys.frameSets)
                 {
                     beams.Add(b);
                 }

@@ -1,0 +1,337 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{138D63CB-6FCD-4628-9147-994147B6699A}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>sWebSystem</RootNamespace>
+    <AssemblyName>sWebSystem</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.Core.2.2.1\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.SystemWeb, Version=2.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.SignalR.SystemWeb.2.2.1\lib\net45\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.2.1.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Jsons\BEAMS.json" />
+    <Content Include="Jsons\Test1.json" />
+    <Content Include="JSRefs\THREEJS\OrbitControls.js" />
+    <Content Include="packages.config" />
+    <Content Include="Jsons\testSystem.json" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="JSRefs\SEMANTIC\.versions" />
+    <Content Include="JSRefs\SEMANTIC\LICENSE" />
+    <Content Include="JSRefs\SEMANTIC\package.json" />
+    <Content Include="JSRefs\SEMANTIC\README.md" />
+    <Content Include="JSRefs\SEMANTIC\themes\default\assets\fonts\icons.eot" />
+    <Content Include="JSRefs\SEMANTIC\themes\default\assets\fonts\icons.otf" />
+    <Content Include="JSRefs\SEMANTIC\themes\default\assets\fonts\icons.ttf" />
+    <Content Include="JSRefs\SEMANTIC\themes\default\assets\fonts\icons.woff" />
+    <Content Include="JSRefs\SEMANTIC\themes\default\assets\fonts\icons.woff2" />
+    <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
+    <Content Include="CSS\BaseStyle.css" />
+    <Content Include="index.html" />
+    <Content Include="JSRefs\SEMANTIC\components\accordion.css" />
+    <Content Include="JSRefs\SEMANTIC\components\accordion.js" />
+    <Content Include="JSRefs\SEMANTIC\components\accordion.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\accordion.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\ad.css" />
+    <Content Include="JSRefs\SEMANTIC\components\ad.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\api.js" />
+    <Content Include="JSRefs\SEMANTIC\components\api.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\breadcrumb.css" />
+    <Content Include="JSRefs\SEMANTIC\components\breadcrumb.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\button.css" />
+    <Content Include="JSRefs\SEMANTIC\components\button.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\card.css" />
+    <Content Include="JSRefs\SEMANTIC\components\card.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\checkbox.css" />
+    <Content Include="JSRefs\SEMANTIC\components\checkbox.js" />
+    <Content Include="JSRefs\SEMANTIC\components\checkbox.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\checkbox.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\colorize.js" />
+    <Content Include="JSRefs\SEMANTIC\components\colorize.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\comment.css" />
+    <Content Include="JSRefs\SEMANTIC\components\comment.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\container.css" />
+    <Content Include="JSRefs\SEMANTIC\components\container.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\dimmer.css" />
+    <Content Include="JSRefs\SEMANTIC\components\dimmer.js" />
+    <Content Include="JSRefs\SEMANTIC\components\dimmer.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\dimmer.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\divider.css" />
+    <Content Include="JSRefs\SEMANTIC\components\divider.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\dropdown.css" />
+    <Content Include="JSRefs\SEMANTIC\components\dropdown.js" />
+    <Content Include="JSRefs\SEMANTIC\components\dropdown.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\dropdown.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\embed.css" />
+    <Content Include="JSRefs\SEMANTIC\components\embed.js" />
+    <Content Include="JSRefs\SEMANTIC\components\embed.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\embed.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\feed.css" />
+    <Content Include="JSRefs\SEMANTIC\components\feed.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\flag.css" />
+    <Content Include="JSRefs\SEMANTIC\components\flag.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\form.css" />
+    <Content Include="JSRefs\SEMANTIC\components\form.js" />
+    <Content Include="JSRefs\SEMANTIC\components\form.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\form.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\grid.css" />
+    <Content Include="JSRefs\SEMANTIC\components\grid.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\header.css" />
+    <Content Include="JSRefs\SEMANTIC\components\header.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\icon.css" />
+    <Content Include="JSRefs\SEMANTIC\components\icon.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\image.css" />
+    <Content Include="JSRefs\SEMANTIC\components\image.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\input.css" />
+    <Content Include="JSRefs\SEMANTIC\components\input.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\item.css" />
+    <Content Include="JSRefs\SEMANTIC\components\item.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\label.css" />
+    <Content Include="JSRefs\SEMANTIC\components\label.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\list.css" />
+    <Content Include="JSRefs\SEMANTIC\components\list.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\loader.css" />
+    <Content Include="JSRefs\SEMANTIC\components\loader.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\menu.css" />
+    <Content Include="JSRefs\SEMANTIC\components\menu.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\message.css" />
+    <Content Include="JSRefs\SEMANTIC\components\message.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\modal.css" />
+    <Content Include="JSRefs\SEMANTIC\components\modal.js" />
+    <Content Include="JSRefs\SEMANTIC\components\modal.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\modal.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\nag.css" />
+    <Content Include="JSRefs\SEMANTIC\components\nag.js" />
+    <Content Include="JSRefs\SEMANTIC\components\nag.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\nag.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\popup.css" />
+    <Content Include="JSRefs\SEMANTIC\components\popup.js" />
+    <Content Include="JSRefs\SEMANTIC\components\popup.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\popup.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\progress.css" />
+    <Content Include="JSRefs\SEMANTIC\components\progress.js" />
+    <Content Include="JSRefs\SEMANTIC\components\progress.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\progress.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\rail.css" />
+    <Content Include="JSRefs\SEMANTIC\components\rail.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\rating.css" />
+    <Content Include="JSRefs\SEMANTIC\components\rating.js" />
+    <Content Include="JSRefs\SEMANTIC\components\rating.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\rating.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\reset.css" />
+    <Content Include="JSRefs\SEMANTIC\components\reset.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\reveal.css" />
+    <Content Include="JSRefs\SEMANTIC\components\reveal.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\search.css" />
+    <Content Include="JSRefs\SEMANTIC\components\search.js" />
+    <Content Include="JSRefs\SEMANTIC\components\search.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\search.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\segment.css" />
+    <Content Include="JSRefs\SEMANTIC\components\segment.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\shape.css" />
+    <Content Include="JSRefs\SEMANTIC\components\shape.js" />
+    <Content Include="JSRefs\SEMANTIC\components\shape.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\shape.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\sidebar.css" />
+    <Content Include="JSRefs\SEMANTIC\components\sidebar.js" />
+    <Content Include="JSRefs\SEMANTIC\components\sidebar.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\sidebar.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\site.css" />
+    <Content Include="JSRefs\SEMANTIC\components\site.js" />
+    <Content Include="JSRefs\SEMANTIC\components\site.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\site.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\state.js" />
+    <Content Include="JSRefs\SEMANTIC\components\state.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\statistic.css" />
+    <Content Include="JSRefs\SEMANTIC\components\statistic.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\step.css" />
+    <Content Include="JSRefs\SEMANTIC\components\step.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\sticky.css" />
+    <Content Include="JSRefs\SEMANTIC\components\sticky.js" />
+    <Content Include="JSRefs\SEMANTIC\components\sticky.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\sticky.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\tab.css" />
+    <Content Include="JSRefs\SEMANTIC\components\tab.js" />
+    <Content Include="JSRefs\SEMANTIC\components\tab.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\tab.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\table.css" />
+    <Content Include="JSRefs\SEMANTIC\components\table.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\transition.css" />
+    <Content Include="JSRefs\SEMANTIC\components\transition.js" />
+    <Content Include="JSRefs\SEMANTIC\components\transition.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\transition.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\video.css" />
+    <Content Include="JSRefs\SEMANTIC\components\video.js" />
+    <Content Include="JSRefs\SEMANTIC\components\video.min.css" />
+    <Content Include="JSRefs\SEMANTIC\components\video.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\visibility.js" />
+    <Content Include="JSRefs\SEMANTIC\components\visibility.min.js" />
+    <Content Include="JSRefs\SEMANTIC\components\visit.js" />
+    <Content Include="JSRefs\SEMANTIC\components\visit.min.js" />
+    <Content Include="JSRefs\SEMANTIC\package.js" />
+    <Content Include="JSRefs\SEMANTIC\semantic.css" />
+    <Content Include="JSRefs\SEMANTIC\semantic.js" />
+    <Content Include="JSRefs\SEMANTIC\semantic.min.css" />
+    <Content Include="JSRefs\SEMANTIC\semantic.min.js" />
+    <Content Include="JSRefs\SEMANTIC\themes\default\assets\fonts\icons.svg" />
+    <Content Include="JSRefs\SEMANTIC\themes\default\assets\images\flags.png" />
+    <Content Include="JSRefs\THREEJS\OrbitControls_modified.js" />
+    <Content Include="JSRefs\THREEJS\three.min.js" />
+    <Content Include="Scripts\jquery-1.6.4.js" />
+    <Content Include="Scripts\jquery-1.6.4.min.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.1.js" />
+    <Content Include="Scripts\jquery.signalR-2.2.1.min.js" />
+    <None Include="Scripts\_references.js" />
+    <Content Include="PageControl\pageControl.js" />
+    <Content Include="sWebSystem\LegendColorBar.png" />
+    <Content Include="sWebSystem\LegendCyanBar.png" />
+    <Content Include="sWebSystem\sWebSystem.js" />
+    <Content Include="sWebSystemServer.asmx" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+    <Compile Include="sWebSystemServer.asmx.cs">
+      <DependentUpon>sWebSystemServer.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\sDataObject\sDataObject.csproj">
+      <Project>{d4e62e01-1e39-4439-b760-3373ebed2c34}</Project>
+      <Name>sDataObject</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>58433</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:58433/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

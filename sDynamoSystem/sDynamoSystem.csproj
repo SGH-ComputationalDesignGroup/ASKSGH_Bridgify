@@ -82,9 +82,6 @@
       <HintPath>..\packages\DynamoVisualProgramming.ZeroTouchLibrary.1.2.0\lib\net45\ProtoGeometry.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="sDataObject">
-      <HintPath>..\..\..\..\AppData\Roaming\Grasshopper\Libraries\sDataObject.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -112,6 +109,16 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\sDataObject\sDataObject.csproj">
+      <Project>{d4e62e01-1e39-4439-b760-3373ebed2c34}</Project>
+      <Name>sDataObject</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DynUtils\" />
+    <Folder Include="Dyn\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

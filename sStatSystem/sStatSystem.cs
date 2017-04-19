@@ -23,6 +23,7 @@ namespace sNStatSystem
         {
             TransfersSystemBasis(ssys);
             TransfersSystemFEelements(ssys);
+            
             BuildFESystem();
         }
 
@@ -35,9 +36,9 @@ namespace sNStatSystem
 
             sStatConverter conv = new sStatConverter();
 
-            foreach(sBeamSet bs in this.beamSets)
+            foreach(sFrameSet bs in this.frameSets)
             {
-                foreach(sBeam b in bs.beams)
+                foreach(sFrame b in bs.frames)
                 {
                     StatCrossSection cs = conv.ToStatCrossSection(b);
 
@@ -90,13 +91,9 @@ namespace sNStatSystem
         }
 
         //?? need this????
-        public sSystem TosSystem(double meshSize_m, double du = 0.0)
+        public sSystem TosSystem()
         {
-            sSystem ssys = new sSystem();
-            //TransfersSystemBasis(ref ssys);
-
-            //sStatConverter conv = new sStatConverter();
-
+            sSystem ssys = this.DuplicatesSystem();
             return ssys;
         }
 
@@ -108,12 +105,12 @@ namespace sNStatSystem
             UpdateBeamResults(this.systemSettings.meshDensity_m, du);
             UpdateNodeResults();
 
+            this.AwaresSystemResult();
+
             this.estimatedMaxD = this.FEsystem.MaximumDisplacement;
             this.estimatedWeight = this.FEsystem.TotalWeight;
         }
-
-
-
+        
         //how to solve by load case / combo...
         public void SolveSystem(double deadLoadFactor)
         {
@@ -273,11 +270,11 @@ namespace sNStatSystem
             
             if (this.FEsystem != null)
             {
-                foreach (sBeamSet bs in this.beamSets)
+                foreach (sFrameSet bs in this.frameSets)
                 {
-                    sBeamSetResult bsRe = new sBeamSetResult();
+                    sResultRange bsRe = new sResultRange();
 
-                    foreach (sBeam sb in bs.beams)
+                    foreach (sFrame sb in bs.frames)
                     {
                         AwaresBeamResult(sb, ref bsRe, dataLenTol);
                     }
@@ -287,7 +284,7 @@ namespace sNStatSystem
             }    
         }
 
-        private void AwaresBeamResult(sBeam sb, ref sBeamSetResult bsRe, double dataLenTol)
+        private void AwaresBeamResult(sFrame sb, ref sResultRange bsRe, double dataLenTol)
         {
             StatBeamResults br = new StatBeamResults();
             sStatConverter conv = new sStatConverter();
@@ -297,7 +294,7 @@ namespace sNStatSystem
             b.RecoverForces();
 
             sb.beamWeight = b.Weight;
-            sb.results = new List<sBeamResult>();
+            sb.results = new List<sFrameResult>();
 
             double len = sb.axis.length;
             int count = (int)(len / dataLenTol);
@@ -310,13 +307,12 @@ namespace sNStatSystem
                 br.t = tNow;
                 b.GetInterpolatedResultsAt(new C_vector(0, 0, -1), this.FEsystem.DeadLoadFactor, br);
 
-                sBeamResult bre = new sBeamResult();
+                sFrameResult bre = new sFrameResult();
                 bre.moment = new sXYZ(br.MomentL.x, br.MomentL.y, br.MomentL.z);
-                bre.force = new sXYZ(br.ForceL.x, br.ForceL.y, br.ForceL.z);
+                bre.force = new sXYZ(-br.ForceL.x, br.ForceL.y, br.ForceL.z); /// force X negate?????????
                 bre.deflection_mm = conv.TosXYZ(b.Csys.LocalToGlobalVector(br.DeflL * 1000));
                 bre.parameterAt = tNow;
 
-                bsRe.UpdateMaxValues(bre);
 
                 sPlane secPlane = new sPlane(sb.axis.PointAt(tNow), sb.localPlane.Xaxis, sb.localPlane.Yaxis);
 
@@ -374,8 +370,8 @@ namespace sNStatSystem
 
                         b.GetSectionPointResult(br);
 
-                        sBeamVertexResult secRe = new sBeamVertexResult();
-                        secRe.point = svp;
+                        sFrameSectionResult secRe = new sFrameSectionResult();
+                        secRe.location = svp;
                         secRe.deflection_mm = conv.TosXYZ(b.Csys.LocalToGlobalVector(br.DeflL * 1000));
 
                         secRe.stress_Combined = Math.Abs(stressTest);
@@ -386,6 +382,8 @@ namespace sNStatSystem
                         bre.sectionResults.Add(secRe);
                     }
                 }
+
+                bsRe.UpdateMaxValues(bre);
                 sb.results.Add(bre);
             }
         }      
@@ -492,7 +490,7 @@ namespace sNStatSystem
 
             foreach (StatBeam stb in this.FEsystem.Beams)
             {
-                sBeam sb = stb.ExtraData as sBeam;
+                sFrame sb = stb.ExtraData as sFrame;
                 if (sb != null)
                 {
                     if (sb.lineLoads != null && sb.lineLoads.Count > 0)
@@ -541,7 +539,7 @@ namespace sNStatSystem
         {
             foreach(StatBeam stb in this.FEsystem.Beams)
             {
-                sBeam sb = stb.ExtraData as sBeam;
+                sFrame sb = stb.ExtraData as sFrame;
                 if(sb != null)
                 {
                     if(sb.lineLoads != null && sb.lineLoads.Count > 0)
@@ -568,15 +566,19 @@ namespace sNStatSystem
             }
         }
 
-
         public void TransfersSystemFEelements(sSystem ssys)
         {
-            if (ssys.beamSets != null)
+            if (ssys.systemResults != null)
             {
-                this.beamSets = new List<sBeamSet>();
-                foreach (sBeamSet bs in ssys.beamSets)
+                this.systemResults = ssys.systemResults.DuplicatesResultRange();
+            }
+
+            if (ssys.frameSets != null)
+            {
+                this.frameSets = new List<sFrameSet>();
+                foreach (sFrameSet bs in ssys.frameSets)
                 {
-                    this.beamSets.Add(bs.DuplicatesBeamSet());
+                    this.frameSets.Add(bs.DuplicatesFrameSet());
                 }
             }
 
@@ -606,45 +608,7 @@ namespace sNStatSystem
             this.estimatedMaxD = ssys.estimatedMaxD;
             this.estimatedWeight = ssys.estimatedWeight;
         }
-
-        public void TransfersSystemFEelements(ref sSystem ssys)
-        {
-            if (this.beamSets != null)
-            {
-                ssys.beamSets = new List<sBeamSet>();
-                foreach (sBeamSet bs in this.beamSets)
-                {
-                    ssys.beamSets.Add(bs.DuplicatesBeamSet());
-                }
-            }
-
-            if (this.nodes != null)
-            {
-                ssys.nodes = new List<sNode>();
-                foreach (sNode ns in this.nodes)
-                {
-                    ssys.nodes.Add(ns.DuplicatesNode());
-                }
-            }
-
-            if (this.loadPatterns != null)
-            {
-                ssys.loadPatterns = this.loadPatterns.ToList();
-            }
-
-            if (this.loadCombinations != null)
-            {
-                ssys.loadCombinations = new List<sLoadCombination>();
-                foreach (sLoadCombination com in this.loadCombinations)
-                {
-                    ssys.loadCombinations.Add(com.DuplicatesLoadCombination());
-                }
-            }
-
-            ssys.estimatedMaxD = this.estimatedMaxD;
-            ssys.estimatedWeight = this.estimatedWeight;
-        }
-
+        
         public void TransfersSystemBasis(sSystem ssys)
         {
             this.systemSettings = ssys.systemSettings.DuplicatesSystemSetting();
@@ -658,17 +622,5 @@ namespace sNStatSystem
             }
         }
 
-        public void TransfersSystemBasis(ref sSystem ssys)
-        {
-            ssys.systemSettings = this.systemSettings.DuplicatesSystemSetting();
-            if (this.meshes != null && this.meshes.Count > 0)
-            {
-                ssys.meshes = new List<sMesh>();
-                foreach (sMesh m in this.meshes)
-                {
-                    ssys.meshes.Add(m.DuplicatesMesh());
-                }
-            }
-        }
     }
 }

@@ -58,7 +58,6 @@ namespace sDataObject.sGeometry
                 cg.colors.Add(new sColor(180.0, 0.4, 1.0));
                 cg.colors.Add(new sColor(0.0, 0.0, 0.5));
                 cg.colors.Add(new sColor(0.0, 0.6, 1.0));
-
             }
 
             if (threshold == null)

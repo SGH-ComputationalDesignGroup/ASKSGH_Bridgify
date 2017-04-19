@@ -13,12 +13,14 @@ using Grasshopper.Kernel.Data;
 using sRhinoSystem.Properties;
 using Grasshopper.Kernel.Types;
 
+using gk = Grasshopper.Kernel.Types;
+
 namespace sRhinoSystem.GH.To_sSystem
 {
     public class SplitSegmentize : GH_Component
     {
         public SplitSegmentize()
-            : base("Split_Segmentize sBeamSets", "Split_Segmentize sBeamSets", "...", "ASKSGH.Bridgify", "To sSystem")
+            : base("Split_Segmentize sElements", "Split_Segmentize sElements", "...", "ASKSGH.Bridgify", "To sSystem")
         {
         }
         public override GH_Exposure Exposure
@@ -27,13 +29,12 @@ namespace sRhinoSystem.GH.To_sSystem
         }
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("sBeamSets", "sBeamSets", "...", GH_ParamAccess.list);
-            pManager.AddGenericParameter("sPointElements", "sPointElements", "...", GH_ParamAccess.list);
+            pManager.AddGenericParameter("sElements", "sElements", "...", GH_ParamAccess.list);
             pManager.AddNumberParameter("intersectTolerance", "intersectTolerance", "...", GH_ParamAccess.item, 0.005);
             pManager.AddNumberParameter("segmentLength", "segmentLength", "...", GH_ParamAccess.item, 0.5);
             Params.Input[1].Optional = true;
             Params.Input[2].Optional = true;
-            Params.Input[3].Optional = true;
+            pManager[0].DataMapping = GH_DataMapping.Flatten;
         }
 
         public override void CreateAttributes()
@@ -43,20 +44,19 @@ namespace sRhinoSystem.GH.To_sSystem
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("sBeamSetGroups", "sBeamSetGroups", "sBeamSetGroups", GH_ParamAccess.tree);
+            pManager.AddGenericParameter("sBeamSets", "sBeamSets", "sBeamSets", GH_ParamAccess.list);
+            pManager.AddGenericParameter("sPointElements", "sPointElements", "sPointElements", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
-            List<sBeamSet> beams = new List<sBeamSet>();
-            List<object> pele = new List<object>();
+            
+            List<object> seles = new List<object>();
             double intTol = 0.005;
             double segTol = 0.5;
-            if (!DA.GetDataList(0, beams)) return;
-            DA.GetDataList(1, pele);
-            if (!DA.GetData(2, ref intTol)) return;
-            if (!DA.GetData(3, ref segTol)) return;
+            if (!DA.GetDataList(0, seles)) return;
+            if (!DA.GetData(1, ref intTol)) return;
+            if (!DA.GetData(2, ref segTol)) return;
 
             string modelUnit = Rhino.RhinoDoc.ActiveDoc.ModelUnitSystem.ToString();
             sRhinoConverter rhcon = new sRhinoConverter(modelUnit, "Meters");
@@ -66,32 +66,35 @@ namespace sRhinoSystem.GH.To_sSystem
                 intTol = 0.015;
                 segTol = 1.5;
             }
-
-            List<sBeamSet> sets = new List<sBeamSet>();
-            foreach (sBeamSet bsori in beams)
-            {
-                sets.Add(bsori.DuplicatesBeamSet());
-            }
-
+            
             List<object> pelements = new List<object>();
-            if(pele.Count == 0)
+            List<sFrameSet> beamelements = new List<sFrameSet>();
+            foreach (object o in seles)
             {
-                pelements = null;
-            }
-            else
-            {
-                foreach(object o in pele)
+                GH_ObjectWrapper wap = new GH_ObjectWrapper(o);
+                sFrameSet bsori = wap.Value as sFrameSet;
+                if(bsori != null)
                 {
-                    GH_ObjectWrapper wap = new GH_ObjectWrapper(o);
-                    pelements.Add(wap.Value);
+                    beamelements.Add(bsori.DuplicatesFrameSet());
+                }
+                sPointLoad pl = wap.Value as sPointLoad;
+                if (pl != null)
+                {
+                    pelements.Add(pl);
+                }
+                sPointSupport ps = wap.Value as sPointSupport;
+                if (ps != null)
+                {
+                    pelements.Add(ps);
                 }
             }
 
-            rhcon.SplitSegmentizesBeamSet(ref sets, intTol, segTol, pelements);
+            rhcon.SplitSegmentizesBeamSet(ref beamelements, intTol, segTol, pelements);
 
+            /*
             string groupInfo = "";
             DataTree<sBeamSet> beamTree = new DataTree<sBeamSet>();
-            var grouped = sets.GroupBy(b => b.beamSetName);
+            var grouped = beamelements.GroupBy(b => b.beamSetName);
             int groupID = 0;
             foreach (var bgroup in grouped)
             {
@@ -105,8 +108,10 @@ namespace sRhinoSystem.GH.To_sSystem
             }
 
             this.Message = groupInfo;
+            */
 
-            DA.SetDataTree(0, beamTree);
+            DA.SetDataList(0, beamelements);
+            DA.SetDataList(1, pelements);
         }
 
         public override Guid ComponentGuid

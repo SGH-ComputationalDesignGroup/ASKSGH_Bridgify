@@ -15,9 +15,9 @@ namespace sSAP17System
     {
 
 
-        public void ToSAPElement(sObject sobj)
+        public void ToSAPElement(IsObject sobj)
         {
-            if(sobj is sBeam)
+            if(sobj is sFrame)
             {
 
             }

@@ -40,10 +40,6 @@
     <Reference Include="SawapanStatica">
       <HintPath>..\..\..\..\AppData\Roaming\Grasshopper\Libraries\SawapanStatica.dll</HintPath>
     </Reference>
-    <Reference Include="sDataObject, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\AppData\Roaming\Grasshopper\Libraries\sDataObject.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -61,6 +57,12 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\sDataObject\sDataObject.csproj">
+      <Project>{d4e62e01-1e39-4439-b760-3373ebed2c34}</Project>
+      <Name>sDataObject</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

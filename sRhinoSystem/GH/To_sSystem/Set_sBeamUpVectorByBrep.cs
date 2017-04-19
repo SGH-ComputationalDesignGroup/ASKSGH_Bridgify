@@ -71,15 +71,15 @@ namespace sRhinoSystem.GH.To_sSystem
             foreach (object ob in sBeamObjs)
             {
                 GH_ObjectWrapper wap = new GH_ObjectWrapper(ob);
-                sBeamSet bs = wap.Value as sBeamSet;
+                sFrameSet bs = wap.Value as sFrameSet;
                 if (bs != null)
                 {
-                    sBeamSet dubs = bs.DuplicatesBeamSet();
-                    if (dubs.beams.Count > 0)
+                    sFrameSet dubs = bs.DuplicatesFrameSet();
+                    if (dubs.frames.Count > 0)
                     {
                         dubs.EnsureBeamElement();
                         rhcon.AwareBeamUpVectorsOnBrep(ref dubs, scaleB, tol);
-                        foreach (sBeam ssb in dubs.beams)
+                        foreach (sFrame ssb in dubs.frames)
                         {
                             pts.Add(rhcon_ToRhinoModel.EnsureUnit(rhcon.ToRhinoPoint3d(ssb.axis.PointAt(0.5))));
                             vecs.Add(rhcon.ToRhinoVector3d(ssb.upVector));
