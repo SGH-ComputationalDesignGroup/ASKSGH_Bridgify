@@ -19,12 +19,12 @@ namespace sDataObject.sElement
 
         public sResultRange()
         {
-            this.forceMax_Positive = new sXYZ(double.MinValue, double.MinValue, double.MinValue);
-            this.forceMax_Negative = new sXYZ(double.MaxValue, double.MaxValue, double.MaxValue);
-            this.momentMax_Positive = new sXYZ(double.MinValue, double.MinValue, double.MinValue);
-            this.momentMax_Negative = new sXYZ(double.MaxValue, double.MaxValue, double.MaxValue);
-            this.deflectionMax_Abs_mm = new sXYZ(double.MinValue, double.MinValue, double.MinValue);
-            this.stressCombinedAbs = double.MinValue;
+            this.forceMax_Positive = new sXYZ(   0.0, 0.0, 0.0);
+            this.forceMax_Negative = new sXYZ(   0.0, 0.0, 0.0);
+            this.momentMax_Positive = new sXYZ(  0.0, 0.0, 0.0);
+            this.momentMax_Negative = new sXYZ(  0.0, 0.0, 0.0);
+            this.deflectionMax_Abs_mm = new sXYZ(0.0, 0.0, 0.0);
+            this.stressCombinedAbs = 0.0;
         }
 
         public void UpdateMaxValues(sResultRange rer)

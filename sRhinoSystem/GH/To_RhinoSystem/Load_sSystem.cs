@@ -53,10 +53,10 @@ namespace sRhinoSystem.GH.ToRhinoSystem
 
             if (!DA.GetData(0, ref hostURL)) return;
             if (!DA.GetData(1, ref load)) return;
-            if (!DA.GetData(2, ref reset)) return;
+            DA.GetData(2, ref reset);
 
-            string url = hostURL + "jsonDataExchange.asmx/ReceiveFromServer";
-
+            string url = hostURL + "sWebSystemServer.asmx/ReceiveFromServer";
+            
             if (load)
             {
                 result = "";
@@ -69,7 +69,7 @@ namespace sRhinoSystem.GH.ToRhinoSystem
 
                     using (var streamWriter = new StreamWriter(request.GetRequestStream()))
                     {
-                        streamWriter.Write("{'GHin':'" + "ask" + "'}");
+                        streamWriter.Write("{'ClientMess':'" + "ask" + "'}");
                         streamWriter.Close();
                     }
                     var httpResponse = (System.Net.HttpWebResponse)request.GetResponse();

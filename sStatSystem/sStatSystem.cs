@@ -21,8 +21,7 @@ namespace sNStatSystem
         
         public void BuildSystem(sSystem ssys)
         {
-            TransfersSystemBasis(ssys);
-            TransfersSystemFEelements(ssys);
+            this.DuplicateFromsSystem(ssys);
             
             BuildFESystem();
         }
@@ -90,7 +89,6 @@ namespace sNStatSystem
 
         }
 
-        //?? need this????
         public sSystem TosSystem()
         {
             sSystem ssys = this.DuplicatesSystem();
@@ -566,61 +564,7 @@ namespace sNStatSystem
             }
         }
 
-        public void TransfersSystemFEelements(sSystem ssys)
-        {
-            if (ssys.systemResults != null)
-            {
-                this.systemResults = ssys.systemResults.DuplicatesResultRange();
-            }
 
-            if (ssys.frameSets != null)
-            {
-                this.frameSets = new List<sFrameSet>();
-                foreach (sFrameSet bs in ssys.frameSets)
-                {
-                    this.frameSets.Add(bs.DuplicatesFrameSet());
-                }
-            }
-
-            if (ssys.nodes != null)
-            {
-                this.nodes = new List<sNode>();
-                foreach (sNode ns in ssys.nodes)
-                {
-                    this.nodes.Add(ns.DuplicatesNode());
-                }
-            }
-
-            if (ssys.loadPatterns != null)
-            {
-                this.loadPatterns = ssys.loadPatterns.ToList();
-            }
-
-            if (ssys.loadCombinations != null)
-            {
-                this.loadCombinations = new List<sLoadCombination>();
-                foreach (sLoadCombination com in ssys.loadCombinations)
-                {
-                    this.loadCombinations.Add(com.DuplicatesLoadCombination());
-                }
-            }
-
-            this.estimatedMaxD = ssys.estimatedMaxD;
-            this.estimatedWeight = ssys.estimatedWeight;
-        }
-        
-        public void TransfersSystemBasis(sSystem ssys)
-        {
-            this.systemSettings = ssys.systemSettings.DuplicatesSystemSetting();
-            if (ssys.meshes != null && ssys.meshes.Count > 0)
-            {
-                this.meshes = new List<sMesh>();
-                foreach (sMesh m in ssys.meshes)
-                {
-                    this.meshes.Add(m.DuplicatesMesh());
-                }
-            }
-        }
 
     }
 }

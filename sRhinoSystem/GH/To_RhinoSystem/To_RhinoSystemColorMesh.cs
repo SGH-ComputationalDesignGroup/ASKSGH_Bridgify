@@ -34,7 +34,7 @@ namespace sRhinoSystem.GH.ToRhinoSystem
             base.AppendAdditionalComponentMenuItems(menu);
             for (int i = 0; i < 15; ++i)
             {
-                if(i != 1 || i != 5 || i != 6)
+                if(i != 1 && i != 4 && i != 5 && i != 6)
                 {
                     System.Windows.Forms.ToolStripItem it = menu.Items.Add(((eColorMode)i).ToString());
 
@@ -87,10 +87,10 @@ namespace sRhinoSystem.GH.ToRhinoSystem
             {
                 paramName = "colorThreshold(N.m|lb.ft)";
             }
-            else if (colMode == eColorMode.Stress_Axial_X)
-            {
-                paramName = "colorThreshold(N.m|lb.ft)";
-            }
+            //else if (colMode == eColorMode.Stress_Axial_X)
+            //{
+            //    paramName = "colorThreshold(N.m|lb.ft)";
+            //}
             // else if (colMode == "Stress_Axial_Y")
             // {
             //     colMode = eColorMode.Stress_Axial_Y;

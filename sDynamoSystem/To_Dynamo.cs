@@ -78,7 +78,11 @@ namespace ASKSGH_Bridgify
             List<object> obj4 = new List<object>();
             if (sghSystem != null)
             {
-               foreach(sFrame b in sghSystem.frameSets)
+                //??????????
+                //??????????
+                //??????????
+                //??????????
+                foreach (sFrameSet b in sghSystem.frameSets)
                 {
                     obj1.Add(b);
                 }

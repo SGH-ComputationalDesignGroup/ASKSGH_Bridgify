@@ -91,6 +91,7 @@ namespace sRhinoSystem.GH.To_sSystem
             if (count == 0)
             {
                 sMesh sm = rhcon.TosMesh(bm);
+                sm.opacity = (double)(col.A) / (255.0);
                 sm.meshName = meshName;
 
                 ssys.meshes.Add(sm);

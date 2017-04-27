@@ -43,11 +43,13 @@ namespace sRhinoSystem.GH.ToRhinoSystem
             base.AppendAdditionalComponentMenuItems(menu);
             for (int i = 0; i < 15; ++i)
             {
-                
-                System.Windows.Forms.ToolStripItem it = menu.Items.Add(((eColorMode)i).ToString());
+                if (i != 1 && i != 4 && i != 5 && i != 6)
+                {
+                    System.Windows.Forms.ToolStripItem it = menu.Items.Add(((eColorMode)i).ToString());
 
-                it.MouseDown += new System.Windows.Forms.MouseEventHandler(it_MouseDown);
-                it.Tag = (eColorMode)i;
+                    it.MouseDown += new System.Windows.Forms.MouseEventHandler(it_MouseDown);
+                    it.Tag = (eColorMode)i;
+                }
             }
         }
 

@@ -22,38 +22,53 @@ namespace ASKSGH_Bridgify
 
         public sDynamoConverter()
         {
-
+            
         }
         public sDynamoConverter(string baseU, string targetU)
         {
+            
             this.baseUnit = baseU;
             this.targetUnit = targetU;
         }
-        
-        internal Dyn.Geometry EnsureUnit(Dyn.Geometry geo)
+
+        public void DisposeGeometries(List<Dyn.Geometry> disposeGeo)
         {
+            if (disposeGeo == null) return;
+            foreach(Dyn.Geometry g in disposeGeo)
+            {
+                g.Dispose();
+            }
+        }
+        
+        internal Dyn.Geometry EnsureUnit(Dyn.Geometry geo, bool disposeInput = false)
+        {
+            Dyn.Geometry scgeo = null;
+            Dyn.Plane xy = Dyn.Plane.XY();
             if (targetUnit == baseUnit)
             {
-                return geo;
+                scgeo = geo.Scale(xy, 1, 1, 1);
             }
             else
             {
                 if (baseUnit == "Meters" && targetUnit == "Feet")
                 {
                     double factor = 3.280841666667;
-                    
-                    return geo.Scale(Dyn.Plane.XY(), factor, factor, factor);
+                    scgeo = geo.Scale(xy, factor, factor, factor);
+
                 }
                 else if (baseUnit == "Feet" && targetUnit == "Meters")
                 {
                     double factor = 0.304800164592;
-                    
-                    return geo.Scale(Dyn.Plane.XY(), factor, factor, factor);               }
+                    scgeo = geo.Scale(xy, factor, factor, factor);
+                }
                 else
                 {
-                    return null;
+                 
                 }
             }
+            if(disposeInput)geo.Dispose();
+            xy.Dispose();
+            return scgeo;
         }
         internal sPointLoad EnsureUnit(sPointLoad pl)
         {
@@ -411,12 +426,74 @@ namespace ASKSGH_Bridgify
             for(int i = 0; i < dpc.NumberOfCurves; ++i)
             {
                 vertice.Add(TosXYZ(dpc.CurveAtIndex(i).StartPoint));
+                if(i == dpc.NumberOfCurves - 1)
+                {
+                    vertice.Add(TosXYZ(dpc.CurveAtIndex(0).EndPoint));
+                }
             }
 
             sPolyLine spl = new sPolyLine(vertice, dpc.IsClosed);
 
             return spl;
             
+        }
+        internal Dyn.Curve ToDynamoCurve(sCurve sc)
+        {
+            Dyn.Curve rc = null;
+            if (sc.curveType == eCurveType.LINE)
+            {
+                rc = ToDynamoLine(sc as sLine) as Dyn.Curve;
+            }
+            else if (sc.curveType == eCurveType.POLYLINE)
+            {
+                rc = ToDynamoPolyCurve(sc as sPolyLine) as Dyn.Curve;
+            }
+            else if (sc.curveType == eCurveType.NURBSCURVE)
+            {
+                //rc = ToRhinoNurbsCurve(sc as sNurbsCurve);
+            }
+            return rc;
+        }
+        internal sCurve TosCurve(Dyn.Curve dc)
+        {
+            sCurve sc = null;
+            
+            Dyn.Line dl = dc as Dyn.Line;
+            if(dl != null)
+            {
+                sc = TosLine(dl);
+                sc.curveType = eCurveType.LINE;
+                dl.Dispose();
+            }
+            Dyn.PolyCurve pc = dc as Dyn.PolyCurve;
+            if(pc != null)
+            {
+                if(pc.NumberOfCurves == 1)
+                {
+                    ////
+                    //what if this segement is nurbsCurve??????
+                    //PolyCurve can be joined nurbsCurve!!!!!!!!!
+
+                    ///
+                    Dyn.Line dtl = Dyn.Line.ByStartPointEndPoint(pc.StartPoint, pc.EndPoint);
+                    sc = TosLine(dtl);
+                    sc.curveType = eCurveType.LINE;
+                    dtl.Dispose();
+                }
+                else
+                {
+                    sc = TosPolyLine(pc);
+                    sc.curveType = eCurveType.POLYLINE;
+                }
+                pc.Dispose();
+            }
+           // Dyn.NurbsCurve nc = dc as Dyn.NurbsCurve;
+           // if(nc != null)
+           // {
+           //     
+           // }
+
+            return sc;
         }
 
         internal sMesh TosMesh(List<double> triVerticeInfo, sColor scol)
@@ -586,6 +663,7 @@ namespace ASKSGH_Bridgify
         {
             return Dyn.Solid.ByLoft(new Dyn.Curve[2] { ToRhinoCrosssectionProfile(sb, 0.0), ToRhinoCrosssectionProfile(sb, 1.0) });
         }
+
         internal Dyn.PolyCurve ToRhinoCrosssectionProfile(sFrame sb, double t)
         {
             sCrossSection scs = sb.crossSection;
@@ -623,6 +701,230 @@ namespace ASKSGH_Bridgify
                 dpts.Add(this.ToDynamoPoint(vertice[i]));
             }
             return Dyn.PolyCurve.ByPoints(dpts, true);
+        }
+
+        internal void SplitSegmentizesBeamSet(ref List<sFrameSet> beamset, double intTol, double segTol, List<object> pointEle = null)
+        {
+            List<Dyn.Geometry> disposeGeo = new List<Dyn.Geometry>();
+            List<Dyn.Curve> allCrvs = new List<Dyn.Curve>();
+            foreach(sFrameSet bs in beamset)
+            {
+                bs.frames.Clear();
+                Dyn.Curve c = ToDynamoCurve(bs.parentCrv);
+                allCrvs.Add(c);
+                disposeGeo.Add(c);
+            }
+
+            List<Dyn.Point> pts = new List<Dyn.Point>();
+            if (pointEle != null)
+            {
+                foreach (object eb in pointEle)
+                {
+                    sPointLoad pl = eb as sPointLoad;
+                    if (pl != null)
+                    {
+                        Dyn.Point p = ToDynamoPoint(pl.location);
+                        pts.Add(p);
+                        disposeGeo.Add(p);
+                    }
+                    sPointSupport ps = eb as sPointSupport;
+                    if (ps != null)
+                    {
+                        Dyn.Point p = ToDynamoPoint(ps.location);
+                        pts.Add(p);
+                        disposeGeo.Add(p);
+                    }
+                }
+            }
+            if (pts.Count == 0) pts = null;
+            
+            foreach (sFrameSet bs in beamset)
+            {
+                Dyn.Curve dc = ToDynamoCurve(bs.parentCrv);
+                int id = 0;
+                List<Dyn.PolyCurve> segCrvs;
+                List<Dyn.Point> assPts;
+                List<Dyn.PolyCurve> segPlns = SplitSegmentizeCurveByCurves(dc, allCrvs, intTol, segTol, out segCrvs, out assPts, pts);
+
+                if (segPlns.Count > 0)
+                {
+                    for (int i = 0; i < segPlns.Count; ++i)
+                    {
+                        if (segCrvs.Count > 1)
+                        {
+                            bs.parentSegments.Add(TosCurve(segCrvs[i]));
+                            disposeGeo.Add(segCrvs[i]);
+                        }
+
+                        Dyn.Curve [] segs = segPlns[i].Curves();
+                        for(int j = 0; j < segs.Length; ++j)
+                        {
+                            if(segs[j].Length > 0.005)
+                            {
+                                Dyn.Line dl = Dyn.Line.ByStartPointEndPoint(segs[j].StartPoint, segs[j].EndPoint);
+                                bs.AddBeamElement(TosLine(dl), sXYZ.Zaxis(), id);
+                                id++;
+                                disposeGeo.Add(dl);
+                            }
+                            disposeGeo.Add(segs[j]);
+                        }
+                        disposeGeo.Add(segPlns[i]);
+                    }
+                    if (assPts != null)
+                    {
+                        bs.associatedLocations = new List<sXYZ>();
+                        foreach (Dyn.Point ap in assPts)
+                        {
+                            bs.associatedLocations.Add(TosXYZ(ap));
+                            disposeGeo.Add(ap);
+                        }
+                    }
+                }
+                else
+                {
+                    Dyn.Line dl = Dyn.Line.ByStartPointEndPoint(dc.StartPoint, dc.EndPoint);
+                    if(dl.Length > 0.005)
+                    {
+                        bs.AddBeamElement(TosLine(dl), sXYZ.Zaxis(), id);
+                        bs.EnsureBeamElement();
+                        id++;
+                    }
+                    disposeGeo.Add(dl);
+                }
+
+                bs.AwareElementsFixitiesByParentFixity(intTol);
+
+                disposeGeo.Add(dc);
+            }
+
+            this.DisposeGeometries(disposeGeo);
+
+        }
+
+        internal List<Dyn.PolyCurve> SplitSegmentizeCurveByCurves(Dyn.Curve c, List<Dyn.Curve> crvs, double intTol, double segTol, out List<Dyn.PolyCurve> segCrvs, out List<Dyn.Point> associatedPts, List<Dyn.Point> pts = null)
+        {
+            List<Dyn.Geometry> disposeGeo = new List<Dyn.Geometry>();
+            List<Dyn.PolyCurve> pls = new List<Dyn.PolyCurve>();
+            List<Dyn.PolyCurve> segcrvs = new List<Dyn.PolyCurve>();
+            List<Dyn.Point> assPts = new List<Dyn.Point>();
+            foreach (Dyn.Curve spc in SplitCurveByCurves(c, crvs, intTol, out assPts, pts))
+            {
+                int segCount = (int)(spc.Length / segTol);
+                ////////////
+                //Do not segmentize if spc is straight line.... How????
+                //How to deal with nurbsCurve?
+                ////////////
+                if (IsLineCurve(spc)) segCount = 0;
+
+                List<Dyn.Point> segPts = new List<Dyn.Point>();
+                if (segCount < 1)
+                {
+                    segPts.Add(spc.StartPoint);
+                    segPts.Add(spc.EndPoint);
+                }
+                else
+                {
+                    segPts.Add(spc.StartPoint);
+                    foreach (Dyn.Point sp in spc.PointsAtEqualSegmentLength(segCount)) {
+                        segPts.Add(sp);
+                        disposeGeo.Add(sp);
+                    }
+                    segPts.Add(spc.EndPoint);
+                }
+
+                segcrvs.Add(Dyn.PolyCurve.ByJoinedCurves(new Dyn.Curve[]{spc}));
+
+                Dyn.PolyCurve pl = Dyn.PolyCurve.ByPoints(segPts);
+                pls.Add(pl);
+                
+            }
+            segCrvs = segcrvs;
+            associatedPts = assPts;
+
+            DisposeGeometries(disposeGeo);
+            return pls;
+        }
+
+        internal List<Dyn.Curve> SplitCurveByCurves(Dyn.Curve c, List<Dyn.Curve> crvs, double intTol, out List<Dyn.Point>assPts, List<Dyn.Point> pts = null)
+        {
+            List<Dyn.Geometry> disposeGeo = new List<Dyn.Geometry>();
+            List<Dyn.Point> paras = new List<Dyn.Point>();
+            List<Dyn.Point> apts = new List<Dyn.Point>();
+
+            foreach (Dyn.Curve dc in crvs)
+            {
+                Dyn.Geometry [] intg = c.Intersect(dc);
+                if(intg != null)
+                {
+                    for(int i = 0; i < intg.Length; ++i)
+                    {
+                        if(intg[i] is Dyn.Point)
+                        {
+                            paras.Add(intg[i] as Dyn.Point);
+                        }
+                        else
+                        {
+                            disposeGeo.Add(intg[i]);
+                        }
+                    }
+                }
+            }
+            if(pts != null)
+            {
+                foreach (Dyn.Point p in pts)
+                {
+                    if (c.DistanceTo(p) < intTol)
+                    {
+                        paras.Add(Dyn.Point.ByCoordinates(p.X, p.Y, p.Z));
+                        apts.Add(Dyn.Point.ByCoordinates(p.X, p.Y, p.Z));
+                    }
+                }
+            }
+            
+            if (apts.Count == 0)
+            {
+                assPts = null;
+            }
+            else
+            {
+                assPts = apts;
+            }
+
+            List<Dyn.Curve> splitedCulled = new List<Dyn.Curve>();
+            foreach(Dyn.Curve sc in c.SplitByPoints(paras))
+            {
+                if(sc.Length > 0.005)
+                {
+                    splitedCulled.Add(sc);
+                }
+                else
+                {
+                    disposeGeo.Add(sc);
+                }
+            }
+            foreach(Dyn.Point p in paras)
+            {
+                disposeGeo.Add(p);
+            }
+            this.DisposeGeometries(disposeGeo);
+
+            return splitedCulled.ToList();
+        }
+
+        internal bool IsLineCurve(Dyn.Curve c)
+        {
+            double lenC = c.Length;
+            Dyn.Line ln = Dyn.Line.ByStartPointEndPoint(c.StartPoint, c.EndPoint);
+            double lenL = ln.Length;
+            ln.Dispose();
+            if(Math.Abs(lenC - lenL) < 0.001)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

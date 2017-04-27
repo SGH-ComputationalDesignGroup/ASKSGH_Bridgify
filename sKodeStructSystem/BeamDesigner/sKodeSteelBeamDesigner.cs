@@ -13,8 +13,14 @@ using Kodestruct.Steel;
 
 namespace sKodeStructSystem.BeamDesigner
 {
-    public class sKodeSteelBeamDesigner : sKodeBeamDesignerBase
+    public class sKodeSteelBeamDesigner : IKodeBeamDesigner
     {
-        
+        public void CheckFlexuralYieldingDCR(sbBeam sbeam)
+        {
+           
+
+
+
+        }
     }
 }

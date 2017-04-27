@@ -979,11 +979,15 @@ namespace sRhinoSystem
         public sMesh TosMesh(Mesh rhm)
         {
             Mesh rm = EnsureTriangulated(rhm);
+            rm.FaceNormals.ComputeFaceNormals();
+            rm.Normals.ComputeNormals();
+
             sMesh sm = new sMesh();
 
             for (int i = 0; i < rm.Vertices.Count; ++i)
             {
                 sm.SetVertex(i, new sXYZ(rm.Vertices[i].X, rm.Vertices[i].Y, rm.Vertices[i].Z));
+                sm.vertices[i].normal = this.TosXYZ( rm.Normals[i]);
                 if (rm.VertexColors[i] != null)
                 {
                     sm.vertices[i].color = sColor.FromWinColor(rm.VertexColors[i]);
@@ -993,6 +997,7 @@ namespace sRhinoSystem
             for (int i = 0; i < rm.Faces.Count; ++i)
             {
                 sm.SetFace(i, rm.Faces[i].A, rm.Faces[i].B, rm.Faces[i].C);
+                sm.faces[i].normal = this.TosXYZ(rm.FaceNormals[i]);
             }
 
             return sm;
@@ -1244,9 +1249,13 @@ namespace sRhinoSystem
                             /////////////////////////
                             //??????????????????????/
                             /////////////////////////
-                            bs.AddBeamElement(TosLine(segln),sXYZ.Zaxis() , id);
-                            bs.EnsureBeamElement();
-                            id++;
+                            if(segln.Length > 0.005)
+                            {
+                                bs.AddBeamElement(TosLine(segln), sXYZ.Zaxis(), id);
+                                bs.EnsureBeamElement();
+                                id++;
+                            }
+                            
                         }
                     }
                     if (assPts != null)
@@ -1264,9 +1273,13 @@ namespace sRhinoSystem
                     /////////////////////////
                     //??????????????????????/
                     /////////////////////////
-                    bs.AddBeamElement(TosLine(segln), sXYZ.Zaxis(), id);
-                    bs.EnsureBeamElement();
-                    id++;
+                    if(segln.Length > 0.005)
+                    {
+                        bs.AddBeamElement(TosLine(segln), sXYZ.Zaxis(), id);
+                        bs.EnsureBeamElement();
+                        id++;
+                    }
+                    
                 }
                 
                 bs.AwareElementsFixitiesByParentFixity(intTol);

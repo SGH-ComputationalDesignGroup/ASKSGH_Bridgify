@@ -1,2 +1,48 @@
 ﻿body {
 }
+
+.column {
+    text-align: center;
+}
+
+.customHidden{
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition:all 0.5s ease-in-out;
+    opacity:0;
+}
+
+#LowerIcon1:hover,
+#LowerIcon2:hover,
+#LowerIcon3:hover,
+#LowerIcon4:hover
+{
+    -webkit-transform: scale(1.1);
+    -moz-transform:scale(1.1);
+    -o-transform:scale(1.1);
+    transform:scale(1.1);
+    cursor: pointer;
+}
+
+#statusIcon,
+#statusInfo,
+#LowerIcon1,
+#LowerIcon2,
+#LowerIcon3,
+#LowerIcon4,
+#lowerUI{
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition:all 0.5s ease-in-out;
+}
+
+#systemInfo,
+#rightInfo,
+#leftInfo{
+    -webkit-transition: all 1.5s ease-in-out;
+    -moz-transition: all 1.5s ease-in-out;
+    -o-transition: all 1.5s ease-in-out;
+    transition:all 1.5s ease-in-out;
+}

@@ -31,63 +31,6 @@ namespace sDataObject.sElement
             this.loadCombinations = new List<sLoadCombination>();
         }
 
-        public sSystem DuplicatesSystem()
-        {
-            sSystem sys = new sSystem();
-
-            if(this.systemResults != null)
-            {
-                sys.systemResults = this.systemResults.DuplicatesResultRange();
-            }
-
-            sys.systemSettings = this.systemSettings.DuplicatesSystemSetting();
-            if (this.meshes != null && this.meshes.Count > 0)
-            {
-                sys.meshes = new List<sMesh>();
-                foreach (sMesh m in this.meshes)
-                {
-                    sys.meshes.Add(m.DuplicatesMesh());
-                }
-            }
-
-            if (this.frameSets != null)
-            {
-                sys.frameSets = new List<sFrameSet>();
-                foreach (sFrameSet bs in this.frameSets)
-                {
-                    sys.frameSets.Add(bs.DuplicatesFrameSet());
-                }
-            }
-
-            if (this.nodes != null)
-            {
-                sys.nodes = new List<sNode>();
-                foreach (sNode ns in this.nodes)
-                {
-                    sys.nodes.Add(ns.DuplicatesNode());
-                }
-            }
-
-            if (this.loadPatterns != null)
-            {
-                sys.loadPatterns = this.loadPatterns.ToList();
-            }
-
-            if (this.loadCombinations != null)
-            {
-                sys.loadCombinations = new List<sLoadCombination>();
-                foreach (sLoadCombination com in this.loadCombinations)
-                {
-                    sys.loadCombinations.Add(com.DuplicatesLoadCombination());
-                }
-            }
-
-            sys.estimatedMaxD = this.estimatedMaxD;
-            sys.estimatedWeight = this.estimatedWeight;
-
-            return sys;
-        }
-
         public void AwaresSystemResult()
         {
             this.systemResults = new sResultRange();
@@ -344,12 +287,25 @@ namespace sDataObject.sElement
             }
         }
 
-        public static sSystem Objectify(string jsonFile)
+        public static sSystem Objectify(string jsonFile, bool isForWeb = false)
         {
-            return JsonConvert.DeserializeObject<sSystem>(jsonFile, new JsonSerializerSettings
+            if (isForWeb)
             {
-                TypeNameHandling = TypeNameHandling.All
-            });
+                return JsonConvert.DeserializeObject<sSystem>(jsonFile, new JsonSerializerSettings
+                {
+                    TypeNameHandling = TypeNameHandling.All
+                });
+            }
+            else
+            {
+                return JsonConvert.DeserializeObject<sSystem>(jsonFile,  new JsonSerializerSettings
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    TypeNameHandling = TypeNameHandling.All,
+                    TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple
+                });
+            }
+            
         }
 
         //this guy doesn't know other system type.. override function?
@@ -382,27 +338,77 @@ namespace sDataObject.sElement
             
         }
 
-        
-/*
-        //need updates
-        public void UpdatePointLoads(sSystem pointLoadSystem)
+        public sSystem DuplicatesSystem()
         {
-            foreach (sNode jn in pointLoadSystem.nodes)
-            {
-                jn.DistributeLoadToRelaventBeams_AsLineLoad(this);
+            sSystem nsys = new sSystem();
 
+            nsys.TransfersSystemBasis(this);
+            nsys.TransfersSystemFEelements(this);
+
+            return nsys;
+        }
+
+        public void DuplicateFromsSystem(sSystem ssys)
+        {
+            this.TransfersSystemBasis(ssys);
+            this.TransfersSystemFEelements(ssys);
+        }
+
+        public void TransfersSystemFEelements(sSystem ssys)
+        {
+            if (ssys.systemResults != null)
+            {
+                this.systemResults = ssys.systemResults.DuplicatesResultRange();
+            }
+
+            if (ssys.frameSets != null)
+            {
+                this.frameSets = new List<sFrameSet>();
+                foreach (sFrameSet bs in ssys.frameSets)
+                {
+                    this.frameSets.Add(bs.DuplicatesFrameSet());
+                }
+            }
+
+            if (ssys.nodes != null)
+            {
+                this.nodes = new List<sNode>();
+                foreach (sNode ns in ssys.nodes)
+                {
+                    this.nodes.Add(ns.DuplicatesNode());
+                }
+            }
+
+            if (ssys.loadPatterns != null)
+            {
+                this.loadPatterns = ssys.loadPatterns.ToList();
+            }
+
+            if (ssys.loadCombinations != null)
+            {
+                this.loadCombinations = new List<sLoadCombination>();
+                foreach (sLoadCombination com in ssys.loadCombinations)
+                {
+                    this.loadCombinations.Add(com.DuplicatesLoadCombination());
+                }
+            }
+
+            this.estimatedMaxD = ssys.estimatedMaxD;
+            this.estimatedWeight = ssys.estimatedWeight;
+        }
+
+        public void TransfersSystemBasis(sSystem ssys)
+        {
+            this.systemSettings = ssys.systemSettings.DuplicatesSystemSetting();
+            if (ssys.meshes != null && ssys.meshes.Count > 0)
+            {
+                this.meshes = new List<sMesh>();
+                foreach (sMesh m in ssys.meshes)
+                {
+                    this.meshes.Add(m.DuplicatesMesh());
+                }
             }
         }
-        //need updates
-        public void UpdatePointLoads(List<sNode> pointLoads)
-        {
-            foreach (sNode jn in pointLoads)
-            {
-                jn.DistributeLoadToRelaventBeams_AsLineLoad(this);
-            }
-        }
-        */
-
     }
 
     public enum eColorMode

@@ -467,7 +467,7 @@ namespace sDataObject.sElement
             {
                 double valThis =  this.results[resultIndex].sectionResults[sectionIndex].stress_Combined;
                 cg = sColorGradient.GetRainbowLikeGradient( dataRange, threshold);
-                double remapped = dataRange.GetOriginBasedNormalizedAt(valThis);
+                double remapped = dataRange.GetNormalizedAt(valThis);//dataRange.GetOriginBasedNormalizedAt(valThis);
                 
                 col = cg.ColorAt(remapped);
             }
@@ -495,7 +495,7 @@ namespace sDataObject.sElement
             {
                 double valThis = this.results[resultIndex].sectionResults[sectionIndex].deflection_mm.GetLength();
                 cg = sColorGradient.GetRainbowLikeGradient(dataRange, threshold);
-                double remapped = dataRange.GetOriginBasedNormalizedAt(valThis);
+                double remapped = dataRange.GetNormalizedAt(valThis);//dataRange.GetOriginBasedNormalizedAt(valThis);
 
                 col = cg.ColorAt(remapped);
             }

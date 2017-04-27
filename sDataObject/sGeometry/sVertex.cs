@@ -35,8 +35,15 @@ namespace sDataObject.sGeometry
             nv.color = this.color.DuplicatesColor();
             nv.ID = this.ID;
             nv.location = this.location.DuplicatesXYZ();
-            nv.normal = this.normal.DuplicatesXYZ();
-            nv.faceIndices = this.faceIndices.ToList();
+            if(this.normal != null)nv.normal = this.normal.DuplicatesXYZ();
+            if(this.faceIndices != null)
+            {
+                nv.faceIndices = new List<int>();
+                foreach(int fid in this.faceIndices)
+                {
+                    nv.faceIndices.Add(fid);
+                }
+            }
             nv.data = this.data;
 
             return nv;

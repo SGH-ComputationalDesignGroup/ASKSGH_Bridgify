@@ -13,6 +13,7 @@ namespace sDataObject.sGeometry
         public List<sVertex> vertices { get; set; }
         public List<sFace> faces { get; set; }
         public string meshName { get; set; }
+        public double opacity { get; set; }
         public object data { get; set; }
         
         public sMesh()
@@ -36,6 +37,7 @@ namespace sDataObject.sGeometry
             }
             nm.meshName = this.meshName;
             nm.data = this.data;
+            nm.opacity = this.opacity;
             return nm;
         }
 

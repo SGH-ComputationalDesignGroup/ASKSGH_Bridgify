@@ -307,46 +307,50 @@ namespace ASKSGH_Bridgify
             };
         }
         
-        [MultiReturn(new[] { "sBeams" })]
-        public static object sBeamElement(string beamName, List<Dyn.Curve> beamLines, List<sCrossSection> crossSections)
+        [MultiReturn(new[] { "sBeamSets" })]
+        public static object sBeamSetByCurves(string beamSetName, List<Dyn.Curve> beamSetCurves, List<sCrossSection> crossSections)
         {
-
-            List<sFrame> beams = new List<sFrame>();
-            
+            List<sFrameSet> sets = new List<sFrameSet>();
+            //how to get Revit Unit?...
             sDynamoConverter dycon = new sDynamoConverter("Feet", "Meters");
 
-            for (int i = 0; i < beamLines.Count; ++i)
+            for (int i = 0; i < beamSetCurves.Count; ++i)
             {
-                double len = beamLines[i].Length;
+                double len = beamSetCurves[i].Length;
                 if (len > 0.005)
                 {
-                    sNode jn0 = new sNode();
-                    jn0.location = dycon.TosXYZ((Dyn.Point)dycon.EnsureUnit(beamLines[i].StartPoint));
-                    sNode jn1 = new sNode();
-                    jn1.location = dycon.TosXYZ((Dyn.Point)dycon.EnsureUnit(beamLines[i].EndPoint));
-
-                    sFrame jb = new sFrame(jn0, jn1, sXYZ.Zaxis());
-                    jb.frameName = beamName;
-                    jb.frameID = i;
+                    Dyn.Curve dc = dycon.EnsureUnit(beamSetCurves[i]) as Dyn.Curve;
+                    sCurve setCrv = dycon.TosCurve(Dyn.PolyCurve.ByJoinedCurves(new Dyn.Curve[] {dc}));
+                    sFrameSet bset = new sFrameSet(setCrv);
+                    bset.frameSetName = beamSetName;
+                    bset.setId = i;
 
                     if (crossSections.Count == 1)
                     {
-                        jb.crossSection = crossSections[0] as sCrossSection;
+                        bset.crossSection = crossSections[0] as sCrossSection;
                     }
-                    else if (crossSections.Count == beamLines.Count)
+                    else if (crossSections.Count == beamSetCurves.Count)
                     {
-                        jb.crossSection = crossSections[i];
+                        bset.crossSection = crossSections[i] as sCrossSection;
                     }
                     
-                    beams.Add(jb);
+                    sets.Add(bset);
+                    dc.Dispose();
                 }
             }
 
+            //for(int i = 0; i < beamSetCurves.Count; ++i)
+            //{
+            //    beamSetCurves[i].Dispose();
+            //}
+
             return new Dictionary<string, object>
             {
-                { "sBeams", beams }
+                { "sBeamSets", sets }
             };
         }
+        
+        /*
         [MultiReturn(new[] { "sBeams" })]
         public static object sBeamElement_Load(string beamName, List<Dyn.Curve> beamLines, List<sCrossSection> crossSections, List<object> lineLoads)
         {
@@ -528,6 +532,8 @@ namespace ASKSGH_Bridgify
                 { "ComboInfo", mss}
             };
         }
+        */
+
         [MultiReturn(new[] { "sPointSupport" })]
         public static object sPointSupport(List<Dyn.Point> points, int supportType, string nodeName = "")
         {
@@ -539,7 +545,8 @@ namespace ASKSGH_Bridgify
             {
                 for (int i = 0; i < points.Count; ++i)
                 {
-                    sXYZ sp = rhcon.TosXYZ((Dyn.Point)rhcon.EnsureUnit(points[i]));
+                    Dyn.Point dp = rhcon.EnsureUnit(points[i]) as Dyn.Point;
+                    sXYZ sp = rhcon.TosXYZ(dp);
 
                     sPointSupport n = new sPointSupport();
                     n.location = sp;
@@ -554,14 +561,18 @@ namespace ASKSGH_Bridgify
                     }
 
                     nodes.Add(n);
+                    dp.Dispose();
                 }
             }
+            
 
             return new Dictionary<string, object>
             {
                 { "sPointSupport", nodes }
             };
         }
+
+        /*
         [MultiReturn(new[] { "sFixity" })]
         public static object sFixity(Dyn.Point location, bool momentRelease)
         {
@@ -581,9 +592,10 @@ namespace ASKSGH_Bridgify
                 { "sFixity", sf }
             };
         }
+        */
 
         [MultiReturn(new[] { "sSystemSettings" })]
-        public static object sSystemSettings(string systemName, string defaultLoadCase = "DEAD", int defaultCheckType = 0, double StressThreshold_ksi =25.0, double DeflectionThreshold_in = 6.0)
+        public static object sSystemSettings(string systemName, string defaultLoadCase = "DEAD", int defaultCheckType = 0, double StressThreshold_ksi =25.0, double DeflectionThreshold_in = 6.0, double mergeTolerance_in = 0.05, double colorMeshSegSize_ft = 1.5)
         {
             sSystemSetting set = new sSystemSetting();
             set.systemName = systemName;
@@ -600,63 +612,42 @@ namespace ASKSGH_Bridgify
 
             set.currentStressThreshold_pascal = StressThreshold_ksi * 6894757.28;
             set.currentDeflectionThreshold_mm = DeflectionThreshold_in * 25.4;
+            set.mergeTolerance_m = mergeTolerance_in * 0.0254;
+            set.meshDensity_m = colorMeshSegSize_ft * 0.3048;
 
             return new Dictionary<string, object>
             {
                 { "sSystemSettings", set }
             };
         }
-        [MultiReturn(new[] { "sGeometrySettings" })]
-        public static object sGeometrySettings(bool splitBeamsByBeams = false, bool splitBeamsByNodes = false, double polylineTolerance_in = 0.0, double mergeTolerance_in = 0.0, double meshDensity_in = 0.0)
-        {
-            sGeometrySetting set = new sGeometrySetting();
-            sDynamoConverter dycon = new sDynamoConverter("Feet", "Meters");
-
-            set.systemOriUnit = "Feet";
-            set.splitBeamsByBeams = false;
-            set.splitBeamsByNodes = false;
-            if (polylineTolerance_in > 0) set.polylineTolerance_m = dycon.EnsureUnit_Dimension(polylineTolerance_in/12.0);
-            if (mergeTolerance_in > 0) set.mergeTolerance_m = dycon.EnsureUnit_Dimension(mergeTolerance_in/12.0);
-            if (meshDensity_in > 0) set.meshDensity_m = dycon.EnsureUnit_Dimension(meshDensity_in/12.0);
-            
-
-            return new Dictionary<string, object>
-            {
-                { "sGeometrySettings", set }
-            };
-        }
 
         [MultiReturn(new[] { "sSystem" })]
-        public static object Build_sSystem(List<object> sElements,object systemSettings = null, object geometrySettings = null)
+        public static object Build_sSystem(List<object> sElements,object systemSettings = null)
         {
             sSystemSetting sysSet = null;
-            sGeometrySetting geoSet = null;
             
             if (systemSettings == null)
             {
                 sysSet = new sSystemSetting();
+                sysSet.systemOriUnit = "Feet";
+
+                sysSet.systemName = "DefaultSetting";
                 sysSet.currentCase = "DEAD";
-                sysSet.currentCheckType = 0;
-                sysSet.currentStressThreshold_pascal = 20 * 6.895E6;
+                sysSet.currentCheckType = eSystemCheckType.StrengthCheck;
+
+                sysSet.currentStressThreshold_pascal = 25 * 6894757.28;
                 sysSet.currentDeflectionThreshold_mm = 100;
+
+                sysSet.mergeTolerance_m = 0.005;
+                sysSet.meshDensity_m = 0.5;
             }
             else
             {
                 sysSet = systemSettings as sSystemSetting;
             }
-
-            if (geometrySettings == null)
-            {
-                geoSet = new sGeometrySetting();
-            }
-            else
-            {
-                geoSet = geometrySettings as sGeometrySetting;
-            }
-
+            
             sSystem jsys = new sSystem();
             jsys.systemSettings = sysSet;
-            jsys.geometrySettings = geoSet;
             List<IsObject> sobjs = new List<IsObject>();
             sDynamoConverter dycon = new sDynamoConverter();
 
@@ -714,8 +705,8 @@ namespace ASKSGH_Bridgify
 
             if (supCount > 0)
             {
-                jsys.geometrySettings.systemBoundingBox = dycon.TosBoundingBox(sobjs);
-                jsys.SystemName = sysSet.systemName;
+                //jsys.geometrySettings.systemBoundingBox = dycon.TosBoundingBox(sobjs);
+                //jsys.SystemName = sysSet.systemName;
                 return new Dictionary<string, object>
                 {
                     { "sSystem", jsys }
@@ -729,7 +720,6 @@ namespace ASKSGH_Bridgify
                 };
             }
         }
-
 
         [MultiReturn(new[] { "sSystem", "AppendedMeshNames" })]
         public static object AppendMesh(sSystem sghSystem, string meshName, List<double> verticeNineNumbers,int colorA , int colorR , int colorG , int colorB )
@@ -765,7 +755,7 @@ namespace ASKSGH_Bridgify
         [MultiReturn(new[] { "status" })]
         public static object Upload_sSystem(string hostURL, bool upload, sSystem sghSystem)
         {
-            string url = hostURL + "jsonDataExchange.asmx/ReceiveFromGrasshopper";
+            string url = hostURL + "sWebSystemServer.asmx/ReceiveFromClient";
             string mmes = "";
 
             if (sghSystem != null)
@@ -786,34 +776,16 @@ namespace ASKSGH_Bridgify
 
                         using (var streamWriter = new StreamWriter(request.GetRequestStream()))
                         {
-                            streamWriter.Write("{'GHin':'" + jsonData + "'}");
+                            streamWriter.Write("{'sysFromClient':'" + jsonData + "'}");
                             streamWriter.Close();
                         }
 
                         var httpResponse = (System.Net.HttpWebResponse)request.GetResponse();
                         StreamReader streamReader = new StreamReader(httpResponse.GetResponseStream());
 
-                        string result = streamReader.ReadToEnd();
-                        if (result.Contains("success"))
-                        {
-                            mmes = "Upload Completed";
-                        }
-                        else if (result.Contains("unstable"))
-                        {
-                            mmes = "System is Unstable";
-                        }
-                        else if (result.Contains("failed"))
-                        {
-                            mmes = "System Calculation Failed";
-                        }
-                        else if (result.Contains("invalid"))
-                        {
-                            mmes = "System is Invalid";
-                        }
-                        else
-                        {
-                            mmes = "Upload Failed";
-                        }
+                        string resp = streamReader.ReadToEnd();
+                        sJsonReceiver jj = Newtonsoft.Json.JsonConvert.DeserializeObject<sJsonReceiver>(resp);
+                        mmes = jj.d;
 
                     }
 
@@ -822,7 +794,6 @@ namespace ASKSGH_Bridgify
                         mmes = "Couldn't Find The Server";
                         string pageContent = new StreamReader(e.Response.GetResponseStream()).ReadToEnd().ToString();
                         //Error = pageContent;
-
                     }
                 }
                 else
@@ -842,12 +813,47 @@ namespace ASKSGH_Bridgify
                 };
 
         }
-        
 
-        //add GetLineLoad...
-        //figure how to deal with load combo
+        [MultiReturn(new[] { "sBeamSets", "sPointElements" })]
+        public static object SplitSegmentize(List<object> sElements, double intersectTolerance = 0.015, double segmentLength = 1.5)
+        {
+            sDynamoConverter dycon = new sDynamoConverter("Feet", "Meters");
 
-}
+            List<object> pelements = new List<object>();
+            List<sFrameSet> beamelements = new List<sFrameSet>();
+            foreach(object iso in sElements)
+            {
+                sFrameSet fs = iso as sFrameSet;
+                if(fs != null)
+                {
+                    beamelements.Add(fs);
+                    continue;
+                }
+                sPointLoad pl = iso as sPointLoad;
+                if (pl != null)
+                {
+                    pelements.Add(pl);
+                    continue;
+                }
+                sPointSupport ps = iso as sPointSupport;
+                if (ps != null)
+                {
+                    pelements.Add(ps);
+                    continue;
+                }
+            }
+
+            dycon.SplitSegmentizesBeamSet(ref beamelements, intersectTolerance, segmentLength, pelements);
+
+            return new Dictionary<string, object>
+                {
+                     { "sBeamSets", beamelements },
+                     { "sPointElements", pelements }
+                };
+        }
+
+
+    }
 
 
 

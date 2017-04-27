@@ -41,9 +41,9 @@ namespace sRhinoSystem.GH.ToRhinoSystem
         protected override void AppendAdditionalComponentMenuItems(System.Windows.Forms.ToolStripDropDown menu)
         {
             base.AppendAdditionalComponentMenuItems(menu);
-            for (int i = 0; i < 14; ++i)
+            for (int i = 0; i < 15; ++i)
             {
-                if(i == 0 || i > 6)
+                if (i != 1 && i != 4 && i != 5 && i != 6)
                 {
                     System.Windows.Forms.ToolStripItem it = menu.Items.Add(((eColorMode)i).ToString());
 
@@ -51,7 +51,7 @@ namespace sRhinoSystem.GH.ToRhinoSystem
                     it.Tag = (eColorMode)i;
                 }
             }
-             
+
         }
 
         void it_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)

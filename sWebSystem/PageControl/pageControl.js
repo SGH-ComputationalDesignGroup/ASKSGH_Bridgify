@@ -1,40 +1,56 @@
-﻿var swCon = new sWebSystem.sWebConverter();
+﻿
 var stHan = new sWebSystem.sSceneHandler();
-var edgeColor = new THREE.Color(0.7, 0.7, 0.7)
-
-var currentColorMode = sWebSystem.eColorMode.Stress_Combined_Absolute;
-
 
 $(document).ready(function () {
+    stHan.ASKSGHProjectName = "sWebSystem";
+    stHan.ASKSGHType = sWebSystem.eASKSGHType.ASKSGH_Gridify;
+    stHan.ProxyServerOn();
 
-    stHan.InitiateASKSGHScene(false);
+    stHan.InitialASKSGH();
 
-    stHan.AddBaseGrid("grid", 10, 10);
-    stHan.AddBaseAxisLines("axis", 10);
+    stHan.deformFactor = 10;
+    //stHan.GetCameraShadowHelper();
+    //stHan.AddBaseGrid("grid", 10, 50);
 
-    stHan.ImportLocalJsonsSystem("testSystem", currentColorMode, 0.0, edgeColor);
+    //stHan.ImportLocalJsonsSystem("testSystem", edgeColor);
+    //stHan.ImportLocalJsonsMesh("Test1");
 
-    //var t = stHan.LoadLocalJsonSystem("testSystem");
-
-    stHan.updateFunctions.push(UpdateColorTest);
-
+    //stHan.updateFunctions.push(DynamicTest);
     stHan.AninmateScene();
-    
 });
-
 
 
 var count = 0;
 var colth = 50000;
-function UpdateColorTest() {
-    //if (count == 30) {
-        count = 0;
-        // Check All Data Type
-        //Stress Moment Need Fix
-        // Figure Out How to Switch Texture Map...
-        stHan.UpdatesSystemColor(sWebSystem.eColorMode.Stress_Combined_Absolute, colth);
-        colth *= 1.01;
-    //}
-    count++;
-    console.log(count);
+function DynamicTest() {
+
+ //  stHan.UpdatesSystemColor(sWebSystem.eColorMode.Stress_Combined_Absolute, colth);
+ //  colth *= 1.01;
+ // 
+    //
+    if(stHan.currentSystem != undefined){
+        if (count > 300) {
+            stHan.AnimateDeformSystem(true);
+        }
+        if (count > 600) {
+            stHan.AnimateDeformSystem(false);
+            count = 0;
+        }
+        count++;
+    }
+   
+    //console.log(stHan.isTouchDevice);
+
+   // if (stHan.objClicked != undefined) {
+   //     console.log(stHan.objClicked.userData.name);
+   // }
+}
+
+function DeferredTest() {
+    var deferred = new $.Deferred();
+    setTimeout(function () {
+
+        deferred.resolve();
+    }, 1000);
+    return deferred.promise();
 }

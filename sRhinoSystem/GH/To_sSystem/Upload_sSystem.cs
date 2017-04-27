@@ -43,7 +43,7 @@ namespace sRhinoSystem.GH.To_sSystem
             pManager.AddTextParameter("Message", "Message", "Message", GH_ParamAccess.item);
         }
 
-        public static int status = 0;
+        public static string mmes = "";
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             string hostURL = "";
@@ -56,8 +56,8 @@ namespace sRhinoSystem.GH.To_sSystem
             if (!DA.GetData(1, ref send)) return;
             if (!DA.GetData(2, ref sghSystem)) return;
 
-            string url = hostURL + "jsonDataExchange.asmx/ReceiveFromGrasshopper";
-            string mmes = "";
+            string url = hostURL + "sWebSystemServer.asmx/ReceiveFromClient";
+            
             string jsonData = "";
             string sysName = "";
 
@@ -66,7 +66,6 @@ namespace sRhinoSystem.GH.To_sSystem
             {
                 sSystem ssys = sghSystem as sSystem;
                 sysName = ssys.systemSettings.systemName;
-
                 
                 jsonData = ssys.Jsonify();
 
@@ -81,65 +80,32 @@ namespace sRhinoSystem.GH.To_sSystem
 
                         using (var streamWriter = new StreamWriter(request.GetRequestStream()))
                         {
-                            streamWriter.Write("{'GHin':'" + jsonData + "'}");
+                            streamWriter.Write("{'sysFromClient':'" + jsonData + "'}");
                             streamWriter.Close();
                         }
 
                         var httpResponse = (System.Net.HttpWebResponse)request.GetResponse();
                         StreamReader streamReader = new StreamReader(httpResponse.GetResponseStream());
 
-                        string result = streamReader.ReadToEnd();
-                        if (result.Contains("success"))
-                        {
-                            status = 1;
-                        }
-                        else if (result.Contains("unstable"))
-                        {
-                            status = 2;
-                        }
-                        else if (result.Contains("failed"))
-                        {
-                            status = 3;
-                        }
-                        else if (result.Contains("invalid"))
-                        {
-                            status = 3;
-                        }
-                        else
-                        {
-                            status = 3;
-                        }
+                        string resp = streamReader.ReadToEnd();
+                        sJsonReceiver jj = Newtonsoft.Json.JsonConvert.DeserializeObject<sJsonReceiver>(resp);
+                        mmes = jj.d;
                     }
 
                     catch (System.Net.WebException e)
                     {
-                        string pageContent = new StreamReader(e.Response.GetResponseStream()).ReadToEnd().ToString();
-                        status = 4;
+                        mmes = e.Message;
                     }
-                }
-                else
-                {
-                //    status = 0;
                 }
             }
 
-            if (status == 1)
+            if (mmes == "Uploaded To ASKSGH")
             {
                 this.Message = "System : " + sysName + "\nhas been uploaded\nData Size:" + Math.Round( jsonData.Length / 1.0E6 ,2) + "Mb";
             }
-            else if (status == 2)
+            else if (mmes == "Failed")
             {
-                this.Message = "System is unstable\nData Size";
-                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, this.Message);
-            }
-            else if (status == 3)
-            {
-                this.Message = "Upload Failed";
-                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, this.Message);
-            }
-            else if (status == 4)
-            {
-                this.Message = "Server Failed";
+                this.Message = "System Falied";
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, this.Message);
             }
             else

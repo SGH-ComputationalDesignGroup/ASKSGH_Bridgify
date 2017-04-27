@@ -321,6 +321,8 @@ namespace sNStatSystem
             double j;
             double c;
 
+            var t = jb;
+
             jb.crossSection.GetWBeamDimensions(jb.crossSection.shapeName, out a, out tw, out d, out tf, out bf, out nw, out ix, out sx, out rx, out zx, out iy, out sy, out ry, out zy, out rts, out ho, out j, out c);
             
             StatCrossSection cs = new StatCrossSection(jb.crossSection.shapeName, mat);

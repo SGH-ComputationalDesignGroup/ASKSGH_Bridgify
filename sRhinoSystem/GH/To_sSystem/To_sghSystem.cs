@@ -60,8 +60,10 @@ namespace sRhinoSystem.GH.To_sSystem
                 sysSetting = new sSystemSetting();
                 sysSetting.systemOriUnit = currentUnit;
 
+                sysSetting.systemName = "DefaultSetting";
                 sysSetting.currentCase = "DEAD";
-                sysSetting.currentCheckType = 0;
+                sysSetting.currentCheckType = eSystemCheckType.StrengthCheck;
+
                 sysSetting.currentStressThreshold_pascal = 25 * 6894757.28;
                 sysSetting.currentDeflectionThreshold_mm = 100;
 
@@ -135,7 +137,7 @@ namespace sRhinoSystem.GH.To_sSystem
 
                     foreach(sMesh am in jsys.meshes)
                     {
-                        sObjs.Add(am);
+                      //  sObjs.Add(am);
                     }
 
                     if (supCount > 0)
