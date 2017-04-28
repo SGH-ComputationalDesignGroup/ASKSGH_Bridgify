@@ -34,6 +34,34 @@ namespace sDataObject.sGeometry
                 return null;
             }
         }
+
+        public bool Intersect(sCurve c, double tol, out sGeometryBase intGeo)
+        {
+            bool doesIntersect = false;
+            sGeometryBase intGeometry = null;
+
+            if(this.curveType == eCurveType.LINE && c.curveType == eCurveType.LINE)
+            {
+                sLine l1 = this as sLine;
+                sLine l2 = c as sLine;
+                doesIntersect = l1.GetIntersection(l2, tol, out intGeometry);
+            }
+            else if (this.curveType == eCurveType.LINE && c.curveType == eCurveType.POLYLINE)
+            {
+
+            }
+            else if (this.curveType == eCurveType.POLYLINE && c.curveType == eCurveType.LINE)
+            {
+
+            }
+            else if (this.curveType == eCurveType.POLYLINE && c.curveType == eCurveType.POLYLINE)
+            {
+
+            }
+
+            intGeo = intGeometry;
+            return doesIntersect;
+        }
     }
 
     public enum eCurveType

@@ -46,7 +46,7 @@ namespace sDataObject.sGeometry
             return dir;
         }
 
-        public bool GetIntersection(sLine ln, double tolerance, out sXYZ intPt)
+        public bool GetIntersection(sLine ln, double tolerance, out sGeometryBase intGeo)
         {
             double t0;
             double t1;
@@ -54,12 +54,22 @@ namespace sDataObject.sGeometry
 
             if(dis < tolerance)
             {
-                intPt = this.PointAt(t0);
-                return true;
+                sXYZ ip0 = this.PointAt(t0);
+                sXYZ ip1 = this.PointAt(t1);
+                if(ip0.DistanceTo(ip1) < 0.001)
+                {
+                    intGeo = this.PointAt(t0);
+                    return true;
+                }
+                else
+                {
+                    intGeo = new sLine(ip0, ip1);
+                    return true;
+                }
             }
             else
             {
-                intPt = null;
+                intGeo = null;
                 return false;
             }
         }

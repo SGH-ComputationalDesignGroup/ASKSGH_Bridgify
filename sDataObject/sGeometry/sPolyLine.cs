@@ -49,5 +49,44 @@ namespace sDataObject.sGeometry
             }
             return new sPolyLine(vts, this.isClosed);
         }
+
+        public bool GetIntersection(sCurve pl, double tolerance, out List<sXYZ> intPoints, out List<sCurve> intCurves)
+        {
+            bool doesIntersect = false;
+            List<sXYZ> intPts = new List<sXYZ>();
+            List<sCurve> intCrvs = new List<sCurve>();
+            if (pl.curveType == eCurveType.LINE)
+            {
+                for(int i = 0; i < this.segments.Count; ++i)
+                {
+                    sGeometryBase igeo;
+                    if(this.segments[i].GetIntersection(pl as sLine, tolerance, out igeo))
+                    {
+                        if(igeo is sLine)
+                        {
+                            intCrvs.Add(igeo as sCurve);
+                        }
+                        if(igeo is sXYZ)
+                        {
+                            intPts.Add(igeo as sXYZ);
+                        }
+                    }
+                }
+            }
+            else if(pl.curveType == eCurveType.POLYLINE)
+            {
+
+            }
+            else if(pl.curveType == eCurveType.NURBSCURVE)
+            {
+
+            }
+
+            //cull if intpoint is on intcurve?
+
+            intPoints = intPts;
+            intCurves = intCrvs;
+            return doesIntersect;
+        }
     }
 }
