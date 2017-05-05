@@ -11,6 +11,7 @@ using sDataObject.sElement;
 using sDataObject.sGeometry;
 using Grasshopper.Kernel.Data;
 using sRhinoSystem.Properties;
+using sDataObject.IElement;
 
 namespace sRhinoSystem.GH.To_sSystem
 {
@@ -43,17 +44,17 @@ namespace sRhinoSystem.GH.To_sSystem
         protected override void SolveInstance(IGH_DataAccess DA)
         {
 
-            List<sFrameSet> beams = new List<sFrameSet>();
+            List<IFrameSet> beams = new List<IFrameSet>();
 
             if (!DA.GetDataList(0, beams)) return;
 
-                DataTree<sFrameSet> beamTree = new DataTree<sFrameSet>();
+                DataTree<IFrameSet> beamTree = new DataTree<IFrameSet>();
                 var grouped = beams.GroupBy(b => b.frameSetName);
                 int groupID = 0;
                 foreach (var bgroup in grouped)
                 {
                     GH_Path bpth = new GH_Path(groupID);
-                    foreach (sFrameSet sb in bgroup)
+                    foreach (IFrameSet sb in bgroup)
                     {
                         beamTree.Add(sb, bpth);
                     }

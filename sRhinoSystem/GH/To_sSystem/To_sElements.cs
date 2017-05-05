@@ -11,6 +11,7 @@ using sDataObject.sElement;
 using sDataObject.sGeometry;
 using Grasshopper.Kernel.Data;
 using sRhinoSystem.Properties;
+using sDataObject.IElement;
 
 namespace sRhinoSystem.GH.To_sSystem
 {
@@ -44,19 +45,19 @@ namespace sRhinoSystem.GH.To_sSystem
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            sSystem ssys = null;
+            ISystem ssys = null;
             
             if (!DA.GetData(0, ref ssys)) return;
 
-            List<sFrameSet> beams = new List<sFrameSet>();
+            List<IFrameSet> beams = new List<IFrameSet>();
             List<sPointSupport> sups = new List<sPointSupport>();
             List<sPointLoad> pls = new List<sPointLoad>();
 
             if (ssys != null)
             {
-                sSystem sys = ssys as sSystem;
+                ISystem sys = ssys as ISystem;
 
-                foreach (sFrameSet b in sys.frameSets)
+                foreach (IFrameSet b in sys.frameSets)
                 {
                     beams.Add(b);
                 }

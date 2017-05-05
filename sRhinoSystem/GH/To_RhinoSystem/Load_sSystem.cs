@@ -11,6 +11,8 @@ using sDataObject.sElement;
 using sDataObject.sGeometry;
 using System.IO;
 using sRhinoSystem.Properties;
+using sDataObject.IElement;
+using sDataObject.ElementBase;
 
 namespace sRhinoSystem.GH.ToRhinoSystem
 {
@@ -95,11 +97,12 @@ namespace sRhinoSystem.GH.ToRhinoSystem
                 result = "";
             }
 
-            sSystem sysLoaded = null;
+            ISystem sysLoaded = null;
             if (result.Length > 0)
             {
                 string jsonSys = result;
-                sysLoaded = sSystem.Objectify(jsonSys);
+                
+                sysLoaded = SystemBase.Objectify(jsonSys);
                 this.Message = "System : " + sysLoaded.systemSettings.systemName + "\nis loaded" + "\nLoadCase: " + sysLoaded.systemSettings.currentCase;
             }
             else

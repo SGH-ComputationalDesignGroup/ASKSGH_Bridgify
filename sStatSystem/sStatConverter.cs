@@ -16,10 +16,10 @@ namespace sNStatSystem
 
         }
 
-        public StatCrossSection ToStatCrossSection(sFrame jb)
+        public StatCrossSection ToStatCrossSection(sFrame jb, bool minuteDensity = false)
         {
             StatCrossSection cs = null;
-            StatMaterial mat = GetStatMaterial(jb);
+            StatMaterial mat = GetStatMaterial(jb, minuteDensity);
 
             if (jb.crossSection.sectionType == eSectionType.AISC_I_BEAM)
             {
@@ -64,7 +64,7 @@ namespace sNStatSystem
             return new sXYZ(cv.x, cv.y, cv.z);
         }
         
-        private StatMaterial GetStatMaterial(sFrame jb)
+        private StatMaterial GetStatMaterial(sFrame jb, bool minuteDensity = false)
         {
             StatMaterial mat = null;
 
@@ -74,9 +74,16 @@ namespace sNStatSystem
                 mat = new StatMaterial(MATERIALTYPES.GENERIC, "StatSteel");
                 mat.Em = 1.999E11;
                 mat.Gm = 7.69E10;
-                mat.Density = 7849.0474;
+                if (minuteDensity)
+                {
+                    mat.Density = 0.000000001;
+                }
+                else
+                {
+                    mat.Density = 7849.0474;
+                }
                 mat.Poisson = 0.3;
-
+                
             }
             else if (jb.crossSection.material.materialType.ToString().Contains("ALUMINUM"))
             {

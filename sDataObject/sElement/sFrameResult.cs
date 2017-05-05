@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 using System.Threading.Tasks;
 using sDataObject.sGeometry;
+using sDataObject.IElement;
 
 namespace sDataObject.sElement
 {
@@ -15,6 +16,7 @@ namespace sDataObject.sElement
         public sXYZ force { get; set; }
         public sXYZ moment { get; set; }
         public sXYZ deflection_mm { get; set; }
+        public sXYZ deflectionLocal_mm { get; set; }
 
         public List<sFrameSectionResult> sectionResults { get; set; }
 
@@ -30,7 +32,8 @@ namespace sDataObject.sElement
             if (this.force != null) newre.force = this.force.DuplicatesXYZ();
             if (this.moment != null) newre.moment = this.moment.DuplicatesXYZ();
             if (this.deflection_mm != null) newre.deflection_mm = this.deflection_mm.DuplicatesXYZ();
-            if(this.sectionResults != null)
+            if (this.deflectionLocal_mm != null) newre.deflectionLocal_mm = this.deflectionLocal_mm.DuplicatesXYZ();
+            if (this.sectionResults != null)
             {
                 newre.sectionResults = new List<sFrameSectionResult>();
                 foreach(sFrameSectionResult vr in this.sectionResults)

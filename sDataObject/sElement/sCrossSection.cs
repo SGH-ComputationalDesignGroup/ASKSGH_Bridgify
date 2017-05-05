@@ -13,6 +13,9 @@ namespace sDataObject.sElement
         public sMaterial material { get; set; }
         public eSectionType sectionType { get; set; }
         public List<double> dimensions { get; set; }
+        public double weight { get; set; }
+        public double depth { get; set; }
+        public double I_StrongAxis { get; set; }
         
         public sCrossSection()
         {
@@ -22,25 +25,41 @@ namespace sDataObject.sElement
         public sCrossSection DuplicatesCrosssection()
         {
             sCrossSection newc = new sCrossSection();
-
+            
             newc.shapeName = this.shapeName;
-            newc.material = this.material.DuplicatesMaterial();
+            if(this.material != null)
+            {
+                newc.material = this.material.DuplicatesMaterial();
+            }
             newc.sectionType = this.sectionType;
             if(this.dimensions != null)
             {
                 newc.dimensions = this.dimensions.ToList();
             }
+            newc.weight = this.weight;
+            newc.depth = this.depth;
+            newc.I_StrongAxis = this.I_StrongAxis;
             return newc;
         }
 
         public sCrossSection(string AISCname)
         {
             this.shapeName = AISCname;
+            this.material = new sMaterial("AISC_Steel", eMaterialType.STEEL_A992_Fy50);
 
             char[] hss = {'X'};
             if (this.shapeName.Contains("W"))
             {
                 this.sectionType = eSectionType.AISC_I_BEAM;
+
+                string xx = this.shapeName.Remove(0, 1);
+                string[] infos = xx.Split(hss);
+                this.depth = double.Parse(infos[0]);
+                this.weight = double.Parse(infos[1]);
+
+                double ix;
+                this.GetWShapeProperties(AISCname, out ix);
+                this.I_StrongAxis = ix;
             }
             else
             {
@@ -1794,7 +1813,7 @@ namespace sDataObject.sElement
             }
         }
 
-        public List<string> GetHSSRecNames()
+        public static List<string> GetHSSRecNames()
         {
             List<string> names = new List<string>();
 
@@ -2689,7 +2708,7 @@ namespace sDataObject.sElement
             }
         }
 
-        public List<string> GetHSSRoundNames()
+        public static List<string> GetHSSRoundNames()
         {
             List<string> names = new List<string>();
 
@@ -3922,7 +3941,7 @@ namespace sDataObject.sElement
             }
         }
 
-        public List<string> GetWBeamNames()
+        public static List<string> GetWShapeNames()
         {
             List<string> names = new List<string>();
 
@@ -3953,7 +3972,7 @@ namespace sDataObject.sElement
             names.Add("W40X183");
             names.Add("W40X167");
             names.Add("W40X149");
-            names.Add("W36X800");
+            //names.Add("W36X800"); //KodeStruct doesn't have this.
             names.Add("W36X652");
             names.Add("W36X529");
             names.Add("W36X487");
@@ -4204,6 +4223,50 @@ namespace sDataObject.sElement
 
             return names;
         }
+
+        public void GetWShapeProperties(string name, out double Ixx)
+        {
+            double a;
+            double tw;
+            double d;
+            double tf;
+            double bf;
+            double nw;
+            double ix;
+            double sx;
+            double rx;
+            double zx;
+            double iy;
+            double sy;
+            double ry;
+            double zy;
+            double rts;
+            double ho;
+            double j;
+            double c;
+
+            this.GetWBeamDimensions(name, out a, out tw, out d, out tf, out bf, out nw, out ix, out sx, out rx, out zx, out iy, out sy, out ry, out zy, out rts, out ho, out j, out c);
+
+            Ixx = ix;
+        }
+
+        public static List<sCrossSection> GetAllWShapes()
+        {
+            List<sCrossSection> wshapes = new List<sCrossSection>();
+            foreach(string wn in sCrossSection.GetWShapeNames())
+            {
+                sCrossSection cs = new sCrossSection(wn);
+
+                double ix;
+                cs.GetWShapeProperties(wn, out ix);
+
+                cs.I_StrongAxis = ix;
+
+                wshapes.Add(cs);
+            }
+            return wshapes;
+        }
+
     }
 
     public enum eSectionType

@@ -24,6 +24,8 @@ namespace sDataObject.sElement
         public double G { get; set; } 
         public double T { get; set; }
 
+        public double Fy { get; set; }
+
         public sMaterial()
         {
 
@@ -53,6 +55,7 @@ namespace sDataObject.sElement
             sm.U = this.U;
             sm.A = this.A;
             sm.T = this.T;
+            sm.Fy = this.Fy;
 
             return sm;
         }

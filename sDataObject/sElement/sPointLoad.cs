@@ -53,6 +53,7 @@ namespace sDataObject.sElement
             if (this.momentVector != null) this.momentVector *= fac;
         }
 
+        /*
         public void GetRelaventBeams(sXYZ point, List<sFrame> beams, out sFrame beam0, out double cldis0, out sFrame beam1, out double cldis1)
         {
             sFrame rb0 = null;
@@ -97,7 +98,6 @@ namespace sDataObject.sElement
             cldis1 = cdis1;
         }
 
-        /*
         public void DistributePointLoadToRelaventBeams(sXYZ point, sSystem jsys)
         {
             sBeam rb0;

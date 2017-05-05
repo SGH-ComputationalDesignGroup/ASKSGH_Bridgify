@@ -12,6 +12,7 @@ using Dyn = Autodesk.DesignScript.Geometry;
 using Autodesk.DesignScript.Runtime;
 
 using System.Drawing;
+using sDataObject.IElement;
 
 namespace ASKSGH_Bridgify
 {

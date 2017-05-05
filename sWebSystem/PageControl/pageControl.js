@@ -15,19 +15,19 @@ $(document).ready(function () {
     //stHan.ImportLocalJsonsSystem("testSystem", edgeColor);
     //stHan.ImportLocalJsonsMesh("Test1");
 
-    //stHan.updateFunctions.push(DynamicTest);
+    stHan.updateFunctions.push(DynamicTest);
     stHan.AninmateScene();
 });
 
 
 var count = 0;
-var colth = 50000;
+var colth = 5;
 function DynamicTest() {
 
- //  stHan.UpdatesSystemColor(sWebSystem.eColorMode.Stress_Combined_Absolute, colth);
- //  colth *= 1.01;
- // 
-    //
+  stHan.UpdatesSystemColor(sWebSystem.eColorMode.Stress_Combined_Absolute, colth);
+  colth *= 1.01;
+ 
+ //
     if(stHan.currentSystem != undefined){
         if (count > 300) {
             stHan.AnimateDeformSystem(true);

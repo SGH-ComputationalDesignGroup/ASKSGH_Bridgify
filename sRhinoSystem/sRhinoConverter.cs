@@ -8,6 +8,7 @@ using sDataObject.sGeometry;
 using sDataObject.sElement;
 using Rhino.Geometry;
 using System.Drawing;
+using sDataObject.IElement;
 
 namespace sRhinoSystem
 {
@@ -1198,10 +1199,10 @@ namespace sRhinoSystem
         }
         
         //.....hate to put this here though....
-        public void SplitSegmentizesBeamSet(ref List<sFrameSet> beamset, double intTol, double segTol, List<object> pointEle = null)
+        public void SplitSegmentizesBeamSet(ref List<IFrameSet> beamset, double intTol, double segTol, List<object> pointEle = null)
         {
             List<Curve> allCrvs = new List<Curve>();
-            foreach (sFrameSet bs in beamset)
+            foreach (IFrameSet bs in beamset)
             {
                 bs.frames.Clear(); //??
                 allCrvs.Add(ToRhinoCurve(bs.parentCrv));
@@ -1226,7 +1227,7 @@ namespace sRhinoSystem
             }
             if (pts.Count == 0) pts = null;
 
-            foreach (sFrameSet bs in beamset)
+            foreach (IFrameSet bs in beamset)
             {
                 Curve rc = ToRhinoCurve(bs.parentCrv);
                 int id = 0;
@@ -1286,7 +1287,7 @@ namespace sRhinoSystem
             }
         }
 
-        public void AwareBeamUpVectorsOnBrep(ref sFrameSet bSet, Brep guideBrep, double tol)
+        public void AwareBeamUpVectorsOnBrep(ref IFrameSet bSet, Brep guideBrep, double tol)
         {
             if (bSet.frames.Count > 0)
             {

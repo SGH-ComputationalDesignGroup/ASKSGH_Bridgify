@@ -11,6 +11,7 @@ using sDataObject.sElement;
 using sDataObject.sGeometry;
 using System.IO;
 using sRhinoSystem.Properties;
+using sDataObject.IElement;
 
 namespace sRhinoSystem.GH.ToRhinoSystem
 {

@@ -11,6 +11,7 @@ using sDataObject.sElement;
 using sDataObject.sGeometry;
 using sRhinoSystem.Properties;
 using Grasshopper.Kernel.Types;
+using sDataObject.IElement;
 
 namespace sRhinoSystem.GH.To_sSystem
 {
@@ -71,10 +72,10 @@ namespace sRhinoSystem.GH.To_sSystem
             foreach (object ob in sBeamObjs)
             {
                 GH_ObjectWrapper wap = new GH_ObjectWrapper(ob);
-                sFrameSet bs = wap.Value as sFrameSet;
+                IFrameSet bs = wap.Value as IFrameSet;
                 if (bs != null)
                 {
-                    sFrameSet dubs = bs.DuplicatesFrameSet();
+                    IFrameSet dubs = bs.DuplicatesFrameSet();
                     if (dubs.frames.Count > 0)
                     {
                         dubs.EnsureBeamElement();

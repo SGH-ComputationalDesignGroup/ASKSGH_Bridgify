@@ -27,7 +27,9 @@ namespace sDataObject.sGeometry
 
         public sXYZ DuplicatesXYZ()
         {
-            return new sXYZ(this.X, this.Y, this.Z);
+            sXYZ n = new sXYZ(this.X, this.Y, this.Z);
+            n.objectGUID = this.objectGUID;
+            return n;
         }
 
         public static sXYZ Zero()
@@ -48,6 +50,13 @@ namespace sDataObject.sGeometry
         public static sXYZ Zaxis()
         {
             return new sXYZ(0, 0, 1);
+        }
+
+        public double ParameterOn(sLine ln)
+        {
+            double t;
+            ln.GetClosestDistanceTo(this, out t);
+            return t;
         }
 
         public static sXYZ operator +(sXYZ v0, sXYZ v1)

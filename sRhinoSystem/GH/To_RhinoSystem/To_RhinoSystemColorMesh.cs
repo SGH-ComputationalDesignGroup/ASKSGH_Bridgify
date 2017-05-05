@@ -12,6 +12,7 @@ using sDataObject.sGeometry;
 using System.IO;
 using System.Drawing;
 using sRhinoSystem.Properties;
+using sDataObject.IElement;
 
 namespace sRhinoSystem.GH.ToRhinoSystem
 {
@@ -156,7 +157,7 @@ namespace sRhinoSystem.GH.ToRhinoSystem
         
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            sSystem sghSystem = null;
+            ISystem sghSystem = null;
             double du = 0.0;
             double the = -1.0;
 
@@ -172,7 +173,7 @@ namespace sRhinoSystem.GH.ToRhinoSystem
 
             if (sghSystem != null)
             {
-                sSystem sys = sghSystem as sSystem;
+                ISystem sys = sghSystem as ISystem;
 
                 sRange th = null;
                 if (the > 0.0)

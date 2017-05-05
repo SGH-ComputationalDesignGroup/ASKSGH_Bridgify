@@ -11,6 +11,9 @@ using sDataObject.sElement;
 using sDataObject.sGeometry;
 using Grasshopper.Kernel.Types;
 using sRhinoSystem.Properties;
+using sDataObject.IElement;
+using sDataObject.ElementBase;
+using sDataObject.sSteelElement;
 
 namespace sRhinoSystem.GH.To_sSystem
 {
@@ -43,6 +46,31 @@ namespace sRhinoSystem.GH.To_sSystem
             pManager.AddGenericParameter("sghSystem", "sghSystem", "sghSystem", GH_ParamAccess.item);
         }
 
+        int sysType = 0;
+        public ISystem InitiateISystem(List<object> objElements)
+        {
+            sysType = 0;
+            foreach (object so in objElements)
+            {
+                GH_ObjectWrapper wap = new GH_ObjectWrapper(so);
+                IFrameSet fs = wap.Value as IFrameSet;
+                 if (fs is sSteelFrameSet)
+                {
+                    sysType = 1;
+                    break;
+                }
+            }
+            
+            if (sysType == 1)
+            {
+                return new sSteelSystem();
+            }
+            else
+            {
+                return new sSystem();
+            }
+        }
+
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             sSystemSetting sysSetting = null;
@@ -73,7 +101,8 @@ namespace sRhinoSystem.GH.To_sSystem
 
             if (currentUnit == "Meters" || currentUnit == "Feet")
             {
-                sSystem jsys = new sSystem();
+                ISystem jsys = InitiateISystem(sElement);
+                
                 jsys.systemSettings = sysSetting;
                 List<IsObject> sObjs = new List<IsObject>();
 
@@ -81,14 +110,14 @@ namespace sRhinoSystem.GH.To_sSystem
 
                 int supCount = 0;
                 int nodeID = 0;
-
+                
                 try
                 {
                     foreach (object so in sElement)
                     {
                         GH_ObjectWrapper wap = new GH_ObjectWrapper(so);
 
-                        sFrameSet bs = wap.Value as sFrameSet;
+                        IFrameSet bs = wap.Value as IFrameSet;
                         if(bs != null)
                         {
                             //jsys.beamSets.Add(bs);

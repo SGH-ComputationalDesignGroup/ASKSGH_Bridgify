@@ -10,6 +10,7 @@ using sDataObject;
 using sDataObject.sElement;
 using sDataObject.sGeometry;
 using sRhinoSystem.Properties;
+using sDataObject.IElement;
 
 namespace sRhinoSystem.GH.To_sSystem
 {
@@ -44,7 +45,7 @@ namespace sRhinoSystem.GH.To_sSystem
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<sFrameSet> beamsets = new List<sFrameSet>();
+            List<IFrameSet> beamsets = new List<IFrameSet>();
             List<Vector3d> upvectors = new List<Vector3d>();
             
             if (!DA.GetDataList(0, beamsets)) return;
@@ -54,7 +55,7 @@ namespace sRhinoSystem.GH.To_sSystem
             sRhinoConverter rhcon = new sRhinoConverter(modelUnit, "Meters");
             sRhinoConverter rhcon_ToRhinoModel = new sRhinoConverter("Meters", modelUnit);
 
-            List<sFrameSet> duplicated = new List<sFrameSet>();
+            List<IFrameSet> duplicated = new List<IFrameSet>();
             List<Point3d> pts = new List<Point3d>();
             List<Vector3d> vecs = new List<Vector3d>();
 
@@ -67,7 +68,7 @@ namespace sRhinoSystem.GH.To_sSystem
                     if (beamsets[i].frames.Count > 0)
                     {
                         sXYZ upvecThis = rhcon.TosXYZ(upvectors[i]);
-                        sFrameSet dubs = beamsets[i].DuplicatesFrameSet();
+                        IFrameSet dubs = beamsets[i].DuplicatesFrameSet();
                         dubs.EnsureBeamElement();
 
                         foreach (sFrame sb in dubs.frames)
@@ -88,11 +89,11 @@ namespace sRhinoSystem.GH.To_sSystem
             }
             else if(upvectors.Count == 1)
             {
-                foreach (sFrameSet bs in beamsets)
+                foreach (IFrameSet bs in beamsets)
                 {
                     if(bs.frames.Count > 0)
                     {
-                        sFrameSet dubs = bs.DuplicatesFrameSet();
+                        IFrameSet dubs = bs.DuplicatesFrameSet();
                         dubs.EnsureBeamElement();
 
                         foreach (sFrame sb in dubs.frames)

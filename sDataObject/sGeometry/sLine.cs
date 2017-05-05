@@ -31,6 +31,7 @@ namespace sDataObject.sGeometry
         public sLine DuplicatesLine()
         {
             sLine nl = new sLine(this.startPoint.DuplicatesXYZ(), this.endPoint.DuplicatesXYZ());
+            nl.objectGUID = this.objectGUID;
             return nl;
         }
 
@@ -46,29 +47,43 @@ namespace sDataObject.sGeometry
             return dir;
         }
 
+        public sLine Reversed()
+        {
+            sLine rl = new sLine(this.endPoint, this.startPoint);
+            return rl;
+        }
+
+        //always return one valid point.
         public bool GetIntersection(sLine ln, double tolerance, out sGeometryBase intGeo)
         {
             double t0;
             double t1;
             double dis = this.GetClosestDistanceBetween(ln, out t0, out t1);
 
-            if(dis < tolerance)
+            sLine rl = this.Reversed();
+            double rt0;
+            double rt1;
+            double rdis = rl.GetClosestDistanceBetween(ln, out rt0, out rt1);
+
+
+            if(dis < tolerance && rdis < tolerance)
             {
-                sXYZ ip0 = this.PointAt(t0);
-                sXYZ ip1 = this.PointAt(t1);
-                if(ip0.DistanceTo(ip1) < 0.001)
+                if(this.PointAt(t0).DistanceTo(rl.PointAt(rt0)) > tolerance)
                 {
-                    intGeo = this.PointAt(t0);
+                    //line
+                    intGeo = new sLine(this.PointAt(t0), rl.PointAt(rt0));
                     return true;
                 }
                 else
                 {
-                    intGeo = new sLine(ip0, ip1);
+                    //point
+                    intGeo = this.PointAt(t0);
                     return true;
                 }
             }
             else
             {
+                //none
                 intGeo = null;
                 return false;
             }

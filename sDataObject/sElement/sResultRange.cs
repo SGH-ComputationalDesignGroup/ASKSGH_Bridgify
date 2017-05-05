@@ -15,6 +15,7 @@ namespace sDataObject.sElement
         public sXYZ momentMax_Positive { get; set; }
         public sXYZ momentMax_Negative { get; set; }
         public sXYZ deflectionMax_Abs_mm { get; set; }
+        public sXYZ deflectionLocalMax_Abs_mm { get; set; }
         public double stressCombinedAbs { get; set; }
 
         public sResultRange()
@@ -24,6 +25,7 @@ namespace sDataObject.sElement
             this.momentMax_Positive = new sXYZ(  0.0, 0.0, 0.0);
             this.momentMax_Negative = new sXYZ(  0.0, 0.0, 0.0);
             this.deflectionMax_Abs_mm = new sXYZ(0.0, 0.0, 0.0);
+            this.deflectionLocalMax_Abs_mm = new sXYZ(0.0, 0.0, 0.0);
             this.stressCombinedAbs = 0.0;
         }
 
@@ -48,6 +50,10 @@ namespace sDataObject.sElement
             if (rer.deflectionMax_Abs_mm.X > this.deflectionMax_Abs_mm.X) this.deflectionMax_Abs_mm.X = rer.deflectionMax_Abs_mm.X;
             if (rer.deflectionMax_Abs_mm.Y > this.deflectionMax_Abs_mm.Y) this.deflectionMax_Abs_mm.Y = rer.deflectionMax_Abs_mm.Y;
             if (rer.deflectionMax_Abs_mm.Z > this.deflectionMax_Abs_mm.Z) this.deflectionMax_Abs_mm.Z = rer.deflectionMax_Abs_mm.Z;
+
+            if (rer.deflectionLocalMax_Abs_mm.X > this.deflectionLocalMax_Abs_mm.X) this.deflectionLocalMax_Abs_mm.X = rer.deflectionLocalMax_Abs_mm.X;
+            if (rer.deflectionLocalMax_Abs_mm.Y > this.deflectionLocalMax_Abs_mm.Y) this.deflectionLocalMax_Abs_mm.Y = rer.deflectionLocalMax_Abs_mm.Y;
+            if (rer.deflectionLocalMax_Abs_mm.Z > this.deflectionLocalMax_Abs_mm.Z) this.deflectionLocalMax_Abs_mm.Z = rer.deflectionLocalMax_Abs_mm.Z;
 
             if (rer.stressCombinedAbs > this.stressCombinedAbs) this.stressCombinedAbs = rer.stressCombinedAbs;
         }
@@ -110,8 +116,10 @@ namespace sDataObject.sElement
             if (defy > this.deflectionMax_Abs_mm.Y) this.deflectionMax_Abs_mm.Y = defy;
             double defz = Math.Abs(bre.deflection_mm.Z);
             if (defz > this.deflectionMax_Abs_mm.Z) this.deflectionMax_Abs_mm.Z = defz;
+            double defLocalz = Math.Abs(bre.deflectionLocal_mm.Z);
+            if (defLocalz > this.deflectionLocalMax_Abs_mm.Z) this.deflectionLocalMax_Abs_mm.Z = defLocalz;
 
-            foreach(sFrameSectionResult vr in bre.sectionResults)
+            foreach (sFrameSectionResult vr in bre.sectionResults)
             {
                 if(vr.stress_Combined > this.stressCombinedAbs)
                 {
@@ -131,6 +139,7 @@ namespace sDataObject.sElement
             newre.momentMax_Positive = this.momentMax_Positive.DuplicatesXYZ();
             newre.momentMax_Negative = this.momentMax_Negative.DuplicatesXYZ();
             newre.deflectionMax_Abs_mm = this.deflectionMax_Abs_mm.DuplicatesXYZ();
+            newre.deflectionLocalMax_Abs_mm = this.deflectionLocalMax_Abs_mm.DuplicatesXYZ();
 
             return newre;
         }

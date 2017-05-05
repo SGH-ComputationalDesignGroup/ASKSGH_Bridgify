@@ -65,9 +65,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BeamDesigner\IKodeBeamDesigner.cs" />
+    <Compile Include="BeamDesigner\sKodeBeamDesignerBase.cs" />
     <Compile Include="BeamDesigner\sKodeSteelBeamDesigner.cs" />
+    <Compile Include="BeamDesigner\sKodeSteelCompositeBeamDesigner.cs" />
+    <Compile Include="BuildingDesigner\IKodeBuildingDesigner.cs" />
+    <Compile Include="BuildingDesigner\sKodeSteelBuildingDesigner.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="IsKodeDesigner.cs" />
+    <Compile Include="sKodeStructConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\sDataObject\sDataObject.csproj">
@@ -83,6 +88,9 @@
     <Folder Include="ColumnDesigner\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(TargetPath)"  "C:\Users\jlee\AppData\Roaming\Grasshopper\Libraries\sKodeStructSystem.dll"</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -11,6 +11,7 @@ using sDataObject.sElement;
 using sDataObject.sGeometry;
 using System.IO;
 using sRhinoSystem.Properties;
+using sDataObject.IElement;
 
 namespace sRhinoSystem.GH.ToRhinoSystem
 {
@@ -95,7 +96,7 @@ namespace sRhinoSystem.GH.ToRhinoSystem
         
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            sFrameSet sb = null;
+            IFrameSet sb = null;
 
             if (!DA.GetData(0, ref sb)) return;
 

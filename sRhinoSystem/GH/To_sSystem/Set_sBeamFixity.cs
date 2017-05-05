@@ -12,6 +12,7 @@ using sDataObject.sGeometry;
 using sRhinoSystem.Properties;
 using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Parameters;
+using sDataObject.IElement;
 
 namespace sRhinoSystem.GH.To_sSystem
 {
@@ -142,7 +143,7 @@ namespace sRhinoSystem.GH.To_sSystem
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<sFrameSet> bsets = new List<sFrameSet>();
+            List<IFrameSet> bsets = new List<IFrameSet>();
             double tol = 0.005;
             if (!DA.GetDataList(0, bsets)) return;
             if (!DA.GetData(1, ref tol)) return;
@@ -202,13 +203,13 @@ namespace sRhinoSystem.GH.To_sSystem
 
             if (modelUnit == "Feet") tol = 0.015;
 
-            List<sFrameSet> duplicated = new List<sFrameSet>();
+            List<IFrameSet> duplicated = new List<IFrameSet>();
             List<Point3d> locsStart = new List<Point3d>();
             List<Point3d> locsEnd = new List<Point3d>();
 
-            foreach (sFrameSet bso in bsets)
+            foreach (IFrameSet bso in bsets)
             {
-                sFrameSet bs = bso.DuplicatesFrameSet();
+                IFrameSet bs = bso.DuplicatesFrameSet();
 
                 bs.ResetFixities();
 
@@ -264,7 +265,7 @@ namespace sRhinoSystem.GH.To_sSystem
                 duplicated.Add(bs);
             }
 
-            foreach(sFrameSet bs in duplicated)
+            foreach(IFrameSet bs in duplicated)
             {
                 if(bs.frames.Count == 0)
                 {

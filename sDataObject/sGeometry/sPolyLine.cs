@@ -47,7 +47,9 @@ namespace sDataObject.sGeometry
             {
                 vts.Add(v.DuplicatesXYZ());
             }
-            return new sPolyLine(vts, this.isClosed);
+            sPolyLine np = new sPolyLine(vts, this.isClosed);
+            np.objectGUID = this.objectGUID;
+            return np;
         }
 
         public bool GetIntersection(sCurve pl, double tolerance, out List<sXYZ> intPoints, out List<sCurve> intCurves)
@@ -75,6 +77,30 @@ namespace sDataObject.sGeometry
             }
             else if(pl.curveType == eCurveType.POLYLINE)
             {
+                sPolyLine pln = pl as sPolyLine;
+                for(int i = 0; i < this.segments.Count; ++i)
+                {
+                    List<sXYZ> tempIntPts = new List<sXYZ>();
+                    for(int j = 0; j < pln.segments.Count; ++j)
+                    {
+                        sGeometryBase igeo;
+                        if (this.segments[i].GetIntersection(pln.segments[j], tolerance, out igeo))
+                        {
+                            if (igeo is sLine)
+                            {
+                                intCrvs.Add(igeo as sCurve);
+                            }
+                            if (igeo is sXYZ)
+                            {
+                                tempIntPts.Add(igeo as sXYZ);
+                            }
+                        }
+                    }
+                    foreach (sXYZ ip in tempIntPts.OrderBy(p => p.ParameterOn(this.segments[i])))
+                    {
+                        intPts.Add(ip);
+                    }
+                }
 
             }
             else if(pl.curveType == eCurveType.NURBSCURVE)

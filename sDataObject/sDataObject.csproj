@@ -45,13 +45,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ElementBase\FrameSetBase.cs" />
+    <Compile Include="ElementBase\SystemBase.cs" />
+    <Compile Include="IElement\IFrameSet.cs" />
+    <Compile Include="IElement\ISystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="sElement\sBay.cs" />
+    <Compile Include="sElement\sEffectiveSlabWidth.cs" />
     <Compile Include="sElement\sFrame.cs" />
     <Compile Include="sElement\sResultRange.cs" />
     <Compile Include="sElement\sFrameSet.cs" />
     <Compile Include="sElement\sFrameResult.cs" />
     <Compile Include="sElement\sCrossSection.cs" />
-    <Compile Include="sElement\sElementBase.cs" />
     <Compile Include="sElement\sTributaryArea.cs" />
     <Compile Include="sElement\sLineLoad.cs" />
     <Compile Include="sElement\sLoadCombination.cs" />
@@ -78,10 +83,13 @@
     <Compile Include="sGeometry\sXYZ.cs" />
     <Compile Include="sJsonReceiver.cs" />
     <Compile Include="IsObject.cs" />
+    <Compile Include="sSteelElement\sSteelFrameSet.cs" />
+    <Compile Include="sSteelElement\sSteelSystem.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy "$(TargetPath)"  "C:\Users\jlee\AppData\Roaming\Grasshopper\Libraries\sDataObject.dll"

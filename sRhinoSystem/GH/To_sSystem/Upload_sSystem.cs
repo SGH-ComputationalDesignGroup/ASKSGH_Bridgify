@@ -11,6 +11,7 @@ using sDataObject.sElement;
 using sDataObject.sGeometry;
 using System.IO;
 using sRhinoSystem.Properties;
+using sDataObject.IElement;
 
 namespace sRhinoSystem.GH.To_sSystem
 {
@@ -49,7 +50,7 @@ namespace sRhinoSystem.GH.To_sSystem
             string hostURL = "";
             bool send = false;
             
-            sSystem sghSystem = null;
+            ISystem sghSystem = null;
 
             if (!DA.GetData(0, ref hostURL)) return;
            // if (!DA.GetData(1, ref conid)) return;
@@ -64,7 +65,7 @@ namespace sRhinoSystem.GH.To_sSystem
 
             if (sghSystem != null)
             {
-                sSystem ssys = sghSystem as sSystem;
+                ISystem ssys = sghSystem as sSystem;
                 sysName = ssys.systemSettings.systemName;
                 
                 jsonData = ssys.Jsonify();

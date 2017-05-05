@@ -1,26 +1,33 @@
-﻿using System;
+﻿
+using sDataObject.ElementBase;
+using sDataObject.IElement;
+using sDataObject.sElement;
+using sDataObject.sGeometry;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using sDataObject.sGeometry;
-using sDataObject.ElementBase;
-using sDataObject.IElement;
-
-namespace sDataObject.sElement
+namespace sDataObject.sSteelElement
 {
-    public class sFrameSet : FrameSetBase
+    public class sSteelFrameSet : FrameSetBase
     {
-        public sFrameSet()
+        public eSteelFrameSetType frameStructureType { get; set; }
+        public bool AsCantilever { get; set; }
+        public bool AsComposite { get; set; }
+        public sEffectiveSlabWidth effectiveSlabEdges { get; set; }
+
+        public sSteelFrameSet()
         {
             SetDefaults();
         }
 
-        public sFrameSet(sCurve pCrv)
+        public sSteelFrameSet(sCurve pCrv, bool asComposite = false)
         {
             this.parentCrv = pCrv;
             SetDefaults();
+            this.AsComposite = asComposite;
         }
 
         void SetDefaults()
@@ -30,14 +37,29 @@ namespace sDataObject.sElement
             this.lineLoads = new List<sLineLoad>();
 
             this.parentSegments = new List<sCurve>();
-        }
 
+            this.AsMinuteDensity = false;
+            this.AsCantilever = false;
+            this.AsComposite = false;
+            this.frameStructureType = eSteelFrameSetType.AsNominal;
+        }
+        
         public override IFrameSet DuplicatesFrameSet()
         {
-            sFrameSet bs = new sFrameSet();
+            sSteelFrameSet bs = new sSteelFrameSet();
             bs.frameSetName = this.frameSetName;
             bs.objectGUID = this.objectGUID;
-            
+
+            bs.frameStructureType = this.frameStructureType;
+            bs.AsCantilever = this.AsCantilever;
+            bs.AsComposite = this.AsComposite;
+
+            bs.AsMinuteDensity = this.AsMinuteDensity;
+            if (this.effectiveSlabEdges != null)
+            {
+                bs.effectiveSlabEdges = this.effectiveSlabEdges.DuplicatesEffectiveSlabWidth();
+            }
+
             bs.setId = this.setId;
             bs.parentCrv = this.parentCrv.DuplicatesCurve();
             if (this.parentSegments != null)
@@ -116,4 +138,11 @@ namespace sDataObject.sElement
         }
     }
 
+    public enum eSteelFrameSetType
+    {
+        AsBeam = 0,
+        AsGirder = 1,
+        AsColumn = 2,
+        AsNominal = 3
+    }
 }

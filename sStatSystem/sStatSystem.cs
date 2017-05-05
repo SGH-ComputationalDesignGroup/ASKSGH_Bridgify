@@ -7,22 +7,30 @@ using SawapanStatica;
 using sDataObject.sElement;
 using sDataObject.sGeometry;
 using Newtonsoft.Json;
+using sDataObject.IElement;
+using sDataObject.ElementBase;
+using sDataObject.sSteelElement;
 
 namespace sNStatSystem
 {
-    public class sStatSystem : sSystem
+    public class sStatSystem : SystemBase
     {
+        public Type oriSystemType { get; set; }
         public StatSystem FEsystem { get; set; }
 
         public sStatSystem()
         {
 
         }
+
+        public sStatSystem(ISystem isys)
+        {
+            this.BuildSystem(isys);
+        }
         
-        public void BuildSystem(sSystem ssys)
+        private void BuildSystem(ISystem ssys)
         {
             this.DuplicateFromsSystem(ssys);
-            
             BuildFESystem();
         }
 
@@ -35,11 +43,11 @@ namespace sNStatSystem
 
             sStatConverter conv = new sStatConverter();
 
-            foreach(sFrameSet bs in this.frameSets)
+            foreach(IFrameSet bs in this.frameSets)
             {
                 foreach(sFrame b in bs.frames)
                 {
-                    StatCrossSection cs = conv.ToStatCrossSection(b);
+                    StatCrossSection cs = conv.ToStatCrossSection(b, bs.AsMinuteDensity);
 
                     StatNode n0 = this.FEsystem.AddNode(conv.ToCVector(b.node0));
                     StatNode n1 = this.FEsystem.AddNode(conv.ToCVector(b.node1));
@@ -89,10 +97,17 @@ namespace sNStatSystem
 
         }
 
-        public sSystem TosSystem()
+        public ISystem ToEmptyISystem()
         {
-            sSystem ssys = this.DuplicatesSystem();
-            return ssys;
+            ISystem ssys = this.DuplicatesSystem();
+            return ssys ;
+        }
+
+        public static ISystem GetCalculatedSystem(ISystem ori, string comboName)
+        {
+            sStatSystem stSys = new sStatSystem(ori);
+            stSys.SolveSystemByCaseName(comboName);
+            return stSys;//??.TosSystem();
         }
 
         public void AwareFESystemResult(double du = 0.0)
@@ -109,7 +124,6 @@ namespace sNStatSystem
             this.estimatedWeight = this.FEsystem.TotalWeight;
         }
         
-        //how to solve by load case / combo...
         public void SolveSystem(double deadLoadFactor)
         {
             this.FEsystem.DeadLoadFactor = deadLoadFactor;
@@ -268,7 +282,7 @@ namespace sNStatSystem
             
             if (this.FEsystem != null)
             {
-                foreach (sFrameSet bs in this.frameSets)
+                foreach (IFrameSet bs in this.frameSets)
                 {
                     sResultRange bsRe = new sResultRange();
 
@@ -309,8 +323,10 @@ namespace sNStatSystem
                 bre.moment = new sXYZ(br.MomentL.x, br.MomentL.y, br.MomentL.z);
                 bre.force = new sXYZ(-br.ForceL.x, br.ForceL.y, br.ForceL.z); /// force X negate?????????
                 bre.deflection_mm = conv.TosXYZ(b.Csys.LocalToGlobalVector(br.DeflL * 1000));
-                bre.parameterAt = tNow;
+                bre.deflectionLocal_mm = conv.TosXYZ(br.DeflL * 1000);
 
+                bre.parameterAt = tNow;
+                
 
                 sPlane secPlane = new sPlane(sb.axis.PointAt(tNow), sb.localPlane.Xaxis, sb.localPlane.Yaxis);
 
@@ -565,6 +581,90 @@ namespace sNStatSystem
         }
 
 
+        //abstract override
+        public override ISystem DuplicatesSystem()
+        {
+            sStatSystem nsys = new sStatSystem();
 
+            nsys.oriSystemType = this.oriSystemType;
+            
+            nsys.TransfersSystemBasis(this);
+            nsys.TransfersSystemIFrameSetElements(this);
+            //any other things only for stat system??
+            //how about FE system?... duplicate???
+
+            return nsys;
+        }
+
+        private void toggleMinuteDensityStatus(eSteelFrameSetType type, bool toggle)
+        {
+            foreach (sSteelFrameSet fs in this.frameSets.Cast<sSteelFrameSet>().Where(f => f.frameStructureType == type))
+            {
+                fs.AsMinuteDensity = toggle;
+            }
+        }
+
+        private int applyDesignedCrossSections(eSteelFrameSetType type, int index = 0)
+        {
+            int count = 0;
+            foreach (sSteelFrameSet fs in this.frameSets.Cast<sSteelFrameSet>().Where(f => f.frameStructureType == type))
+            {
+                if (fs.designedCrossSections != null && fs.designedCrossSections.Count > 0)
+                {
+                    fs.crossSection = null;
+                    if (index > fs.designedCrossSections.Count - 1) index = fs.designedCrossSections.Count - 1;
+                    fs.crossSection = fs.designedCrossSections[index].DuplicatesCrosssection();
+
+                    fs.UpdatesFrameCrossSections();
+
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        public override void ToggleMinuteDensityStatus(object frameSetFilter, bool toggle)
+        {
+            if (frameSetFilter is string)
+            {
+                foreach (IFrameSet fs in this.frameSets.Where(f => f.frameSetName.Equals((string)frameSetFilter)))
+                {
+                    fs.AsMinuteDensity = toggle;
+                }
+            }
+            else if (frameSetFilter is eSteelFrameSetType)
+            {
+                eSteelFrameSetType type = (eSteelFrameSetType)frameSetFilter;
+                this.toggleMinuteDensityStatus(type, toggle);
+            }
+        }
+
+        public override int ApplyDesignedCrossSections(object frameSetFilter, int index = 0)
+        {
+            int count = 0;
+
+            if (frameSetFilter is eSteelFrameSetType)
+            {
+                eSteelFrameSetType type = (eSteelFrameSetType)frameSetFilter;
+                count = this.applyDesignedCrossSections(type, index);
+            }
+            else if (frameSetFilter is string)
+            {
+                foreach (IFrameSet fs in this.frameSets.Where(f => f.frameSetName.Equals((string)frameSetFilter)))
+                {
+                    if (fs.designedCrossSections != null && fs.designedCrossSections.Count > 0)
+                    {
+                        fs.crossSection = null;
+                        if (index > fs.designedCrossSections.Count - 1) index = fs.designedCrossSections.Count - 1;
+                        fs.crossSection = fs.designedCrossSections[index].DuplicatesCrosssection();
+
+                        fs.UpdatesFrameCrossSections();
+
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
     }
 }

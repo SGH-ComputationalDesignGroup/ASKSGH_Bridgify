@@ -14,6 +14,7 @@ using sRhinoSystem.Properties;
 using Grasshopper.Kernel.Types;
 
 using gk = Grasshopper.Kernel.Types;
+using sDataObject.IElement;
 
 namespace sRhinoSystem.GH.To_sSystem
 {
@@ -68,11 +69,11 @@ namespace sRhinoSystem.GH.To_sSystem
             }
             
             List<object> pelements = new List<object>();
-            List<sFrameSet> beamelements = new List<sFrameSet>();
+            List<IFrameSet> beamelements = new List<IFrameSet>();
             foreach (object o in seles)
             {
                 GH_ObjectWrapper wap = new GH_ObjectWrapper(o);
-                sFrameSet bsori = wap.Value as sFrameSet;
+                IFrameSet bsori = wap.Value as IFrameSet;
                 if(bsori != null)
                 {
                     beamelements.Add(bsori.DuplicatesFrameSet());

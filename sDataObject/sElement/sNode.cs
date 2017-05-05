@@ -7,8 +7,9 @@ using sDataObject.sGeometry;
 
 namespace sDataObject.sElement
 {
-    public class sNode : sElementBase
+    public class sNode : IsObject
     {
+        public Guid objectGUID { get; set; }
         public string nodeName { get; set; }
         public int nodeID { get; set; }
         public sXYZ location { get; set; }

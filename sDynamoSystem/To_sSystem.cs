@@ -23,19 +23,17 @@ namespace ASKSGH_Bridgify
         {
             List<string> names = new List<string>();
 
-            sCrossSection cs = new sCrossSection();
-
             if (type == 0)
             {
-                names = cs.GetWBeamNames().ToList();
+                names = sCrossSection.GetWShapeNames().ToList();
             }
             else if (type == 1)
             {
-                names = cs.GetHSSRecNames().ToList();
+                names = sCrossSection.GetHSSRecNames().ToList();
             }
             else if (type == 2)
             {
-                names = cs.GetHSSRoundNames().ToList();
+                names = sCrossSection.GetHSSRoundNames().ToList();
             }
 
             if (index > names.Count - 1)

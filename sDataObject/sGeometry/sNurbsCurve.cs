@@ -37,7 +37,9 @@ namespace sDataObject.sGeometry
             {
                 cpts.Add(cp.DuplicatesXYZ());
             }
-            return new sNurbsCurve(cpts, this.weights.ToList(), this.knots.ToList(), this.length, this.degree);
+            sNurbsCurve nc = new sNurbsCurve(cpts, this.weights.ToList(), this.knots.ToList(), this.length, this.degree);
+            nc.objectGUID = this.objectGUID;
+            return nc;
         }
     }
 }

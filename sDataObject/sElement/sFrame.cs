@@ -5,11 +5,13 @@ using System.Text;
 using System.Drawing;
 using System.Threading.Tasks;
 using sDataObject.sGeometry;
+using sDataObject.IElement;
 
 namespace sDataObject.sElement
 {
-    public class sFrame : sElementBase
+    public class sFrame : IsObject
     {
+        public Guid objectGUID { get; set; }
         public int frameID { get; set; }
         public Guid parentGuid { get; set; }
         public string frameName { get; set; }

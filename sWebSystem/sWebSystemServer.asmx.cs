@@ -8,7 +8,7 @@ using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 
 using sNStatSystem;
-using sDataObject.sBuildingElement;
+
 using sDataObject.sElement;
 
 namespace sWebSystem
@@ -37,7 +37,7 @@ namespace sWebSystem
             }
             catch (Exception e)
             {
-                //status = e.Message;
+                status = e.Message;
                 status = "Failed";
             }
             return status;
@@ -64,16 +64,16 @@ namespace sWebSystem
 
         public void CalculatesSystem(string jsonSystem)
         {
-            sSystem ssys = sSystem.Objectify(jsonSystem);
-
-            sStatSystem stSys = new sStatSystem();
-            stSys.BuildSystem(ssys);
-            stSys.SolveSystemByCaseName(stSys.systemSettings.currentCase);
-
-            sSystem csys = stSys.TosSystem();
-            
-            latestSystem = csys.Jsonify();
-            FeedSystemToClient(csys.Jsonify(true));
+           // sSystem ssys = sSystem.Objectify(jsonSystem);
+           //
+           // sStatSystem stSys = new sStatSystem();
+           // stSys.BuildSystem(ssys);
+           // stSys.SolveSystemByCaseName(stSys.systemSettings.currentCase);
+           //
+           // sSystem csys = stSys.ToISystem();
+           // 
+           // latestSystem = csys.Jsonify();
+           // FeedSystemToClient(csys.Jsonify(true));
         }
         //to call signalR outside of scope, make it as static
 

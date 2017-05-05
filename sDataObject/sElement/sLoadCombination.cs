@@ -32,6 +32,20 @@ namespace sDataObject.sElement
             return nc;
         }
 
+        public double GetFactorByPattern(string pattern)
+        {
+            double fac = 0.0;
+            for (int i = 0; i < this.patterns.Count; ++i)
+            {
+                if(this.patterns[i] == pattern)
+                {
+                    fac = this.factors[i];
+                    break;
+                }
+            }
+            return fac;
+        }
+
         public List<sPointLoad> GetCorrespondingFactoredPointLoads(List<sPointLoad> loadAll)
         {
             List<sPointLoad> factored = new List<sPointLoad>();

@@ -11,6 +11,8 @@ using Dyn = Autodesk.DesignScript.Geometry;
 using Autodesk.DesignScript.Runtime;
 
 using System.Drawing;
+using sDataObject.IElement;
+using sDataObject.ElementBase;
 
 namespace ASKSGH_Bridgify
 {
@@ -44,10 +46,11 @@ namespace ASKSGH_Bridgify
                     sJsonReceiver jj = Newtonsoft.Json.JsonConvert.DeserializeObject<sJsonReceiver>(resp);
 
                     string jsonSys = jj.d;
+                    
 
                     return new Dictionary<string, object>
                      {
-                          { "sghSystem", sSystem.Objectify(jsonSys) }
+                          { "sghSystem", SystemBase.Objectify(jsonSys) }
                      };
                 }
                 catch (System.Net.WebException e)
