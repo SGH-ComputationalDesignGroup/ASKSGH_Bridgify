@@ -24,96 +24,6 @@ namespace sRhinoSystem.GH.To_sSystem
             get { return GH_Exposure.tertiary; }
         }
 
-        protected override void AppendAdditionalComponentMenuItems(System.Windows.Forms.ToolStripDropDown menu)
-        {
-            base.AppendAdditionalComponentMenuItems(menu);
-            Menu_AppendItem(menu, "NonSpecified", menuChangeMode);
-            Menu_AppendItem(menu, "SteelMember", menuChangeMode);
-            Menu_AppendItem(menu, "CompositeSteelMember", menuChangeMode);
-        }
-        int memberType = 0;
-        private void menuChangeMode(object sender, EventArgs e)
-        {
-            var dataIn = sender.ToString();
-            if (Params.Input.Count > 1)
-            {
-                GH_ComponentParamServer.IGH_SyncObject so = Params.EmitSyncObject();
-                List<IGH_Param> pars = new List<IGH_Param>();
-                pars.AddRange(Params.Input);
-                foreach (IGH_Param pi in pars)
-                {
-                    if (pi.NickName == "MemberType")
-                    {
-                        pi.IsolateObject();
-                        Params.UnregisterInputParameter(pi);
-                    }
-                }
-            }
-
-            int type = 0;
-            switch (dataIn)
-            {
-                case "NonSpecified":
-                    type = 0;
-                    break;
-
-                case "SteelMember":
-                    if (Params.Input.Count == 4)
-                    {
-                        NewIntParam("MemberType", "MemberType", "0=Beam, 1=Girder, 2=Column", GH_ParamAccess.item, 0);
-                    }
-                    type = 1;
-                    break;
-
-                case "CompositeSteelMember":
-                    if (Params.Input.Count == 4)
-                    {
-                        NewIntParam("MemberType", "MemberType", "0=Beam, 1=Girder, 2=Column", GH_ParamAccess.item, 0);
-                    }
-                    type = 2;
-                    break;
-            }
-            
-            SetSupportType(type);
-        }
-
-        public void SetSupportType(int stype)
-        {
-            memberType = stype;
-            this.ExpireSolution(true);
-        }
-
-        public override bool Write(GH_IO.Serialization.GH_IWriter writer)
-        {
-            writer.SetInt32("MemType", memberType);
-            return base.Write(writer);
-        }
-
-        public override bool Read(GH_IO.Serialization.GH_IReader reader)
-        {
-            int ty = 0;
-            reader.TryGetInt32("MemType", ref ty);
-
-            SetSupportType(ty);
-
-            return base.Read(reader);
-        }
-
-        protected IGH_Param NewIntParam(string _name, string _nickname, string _desc, GH_ParamAccess paramAccess, int _default)
-        {
-            Param_Integer pn = new Param_Integer();
-
-            pn.Name = _name;
-            pn.NickName = _nickname;
-            pn.Description = _desc;
-            pn.Access = paramAccess;
-            pn.SetPersistentData(new GH_Integer(_default));
-
-            Params.RegisterInputParam(pn);
-            
-            return pn;
-        }
-
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("beamSetName", "beamSetName", "...", GH_ParamAccess.item);
@@ -164,20 +74,7 @@ namespace sRhinoSystem.GH.To_sSystem
                 {
                     Curve rc = rhcon.EnsureUnit(beamSetCurves[i]);
                     sCurve setCrv = rhcon.TosCurve(rc);
-                    IFrameSet bset = null;
-                    if (memberType == 0)
-                    {
-                        bset = new sFrameSet(setCrv);
-                    }
-                    else if (memberType == 1)
-                    {
-                        bset = new sSteelFrameSet(setCrv);
-                    }
-                    else if(memberType == 2)
-                    {
-                        bset = new sSteelFrameSet(setCrv, true);
-                    }
-                    
+                    IFrameSet bset  = new sFrameSet(setCrv);
                     bset.frameSetName = beamSetName;
                     bset.setId = i;
 

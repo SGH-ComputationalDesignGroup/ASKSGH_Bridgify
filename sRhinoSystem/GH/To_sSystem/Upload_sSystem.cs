@@ -29,6 +29,7 @@ namespace sRhinoSystem.GH.To_sSystem
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddTextParameter("ASKSGH_URL", "ASKSGH_URL", "...", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("ASKSGH_Type", "ASKSGH_Type", "Colorify_Dyanmic = 0, Webify = 2, Gridify = 3", GH_ParamAccess.item);
             pManager.AddBooleanParameter("upload", "upload", "...", GH_ParamAccess.item);
             pManager.AddGenericParameter("sghSystem", "sghSystem", "...", GH_ParamAccess.item);
             // Params.Input[0].Optional = true;

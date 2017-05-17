@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sRhinoSystem", "sRhinoSystem\sRhinoSystem.csproj", "{FFBD40B3-32E9-4048-955F-BCE28F795CC0}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sWebSystem", "sWebSystem\sWebSystem.csproj", "{138D63CB-6FCD-4628-9147-994147B6699A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sFEMAP11System", "sFEMAP11System\sFEMAP11System.csproj", "{BF8889BB-E6CD-423A-9015-E19E64181C7D}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "sAbacusSystem", "sAbacusSystem\sAbacusSystem.pyproj", "{25EA9E73-829D-4FE3-826C-8BE4C7BF6577}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -159,6 +161,14 @@ Global
 		{BF8889BB-E6CD-423A-9015-E19E64181C7D}.Release|x64.Build.0 = Release|Any CPU
 		{BF8889BB-E6CD-423A-9015-E19E64181C7D}.Release|x86.ActiveCfg = Release|Any CPU
 		{BF8889BB-E6CD-423A-9015-E19E64181C7D}.Release|x86.Build.0 = Release|Any CPU
+		{25EA9E73-829D-4FE3-826C-8BE4C7BF6577}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25EA9E73-829D-4FE3-826C-8BE4C7BF6577}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{25EA9E73-829D-4FE3-826C-8BE4C7BF6577}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{25EA9E73-829D-4FE3-826C-8BE4C7BF6577}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{25EA9E73-829D-4FE3-826C-8BE4C7BF6577}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25EA9E73-829D-4FE3-826C-8BE4C7BF6577}.Release|ARM.ActiveCfg = Release|Any CPU
+		{25EA9E73-829D-4FE3-826C-8BE4C7BF6577}.Release|x64.ActiveCfg = Release|Any CPU
+		{25EA9E73-829D-4FE3-826C-8BE4C7BF6577}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

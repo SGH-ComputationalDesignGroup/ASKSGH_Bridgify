@@ -47,7 +47,9 @@
   <ItemGroup>
     <Compile Include="ElementBase\FrameSetBase.cs" />
     <Compile Include="ElementBase\SystemBase.cs" />
+    <Compile Include="ElementBase\SystemSettingBase.cs" />
     <Compile Include="IElement\IFrameSet.cs" />
+    <Compile Include="IElement\ISystemSetting.cs" />
     <Compile Include="IElement\ISystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="sElement\sBay.cs" />

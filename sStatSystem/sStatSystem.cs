@@ -382,7 +382,8 @@ namespace sNStatSystem
 
                         double stressTest = axialStress_X + MyStress - MzStress; //why negate?...(StatBeamResult does this)
 
-                        b.GetSectionPointResult(br);
+                        //do I need?
+                        //b.GetSectionPointResult(br);
 
                         sFrameSectionResult secRe = new sFrameSectionResult();
                         secRe.location = svp;

@@ -373,6 +373,16 @@ namespace sRhinoSystem.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap TosSteelBeam {
+            get {
+                object obj = ResourceManager.GetObject("TosSteelBeam", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap tributary_line {
             get {
                 object obj = ResourceManager.GetObject("tributary_line", resourceCulture);

@@ -75,6 +75,7 @@
     <Compile Include="GH\To_sSystem\sPointSupportGroupBySupportType.cs" />
     <Compile Include="GH\To_sSystem\Set_AppendixMesh.cs" />
     <Compile Include="GH\To_sSystem\sBeamGroupByName.cs" />
+    <Compile Include="GH\To_sSteelSystem\To_sSteelBeamSet.cs" />
     <Compile Include="GH\To_sSystem\To_sBeamSet.cs" />
     <Compile Include="GH\To_sSystem\To_sSystemSettings.cs" />
     <Compile Include="GH\To_sSystem\To_sLineLoad.cs" />
@@ -224,6 +225,9 @@
       <Project>{d4e62e01-1e39-4439-b760-3373ebed2c34}</Project>
       <Name>sDataObject</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GH\icons\TosSteelBeam.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

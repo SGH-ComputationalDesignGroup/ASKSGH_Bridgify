@@ -1,0 +1,6 @@
+    <script src="http://localhost:58433/Signalr/hubs"></script>
+    <script src="/signalr/hubs"></script>
+    <script src='<%: ResolveClientUrl("~/Signalr/hubs") %>'></script>
+    
+    <script src="http://sghnet-apps.sgh.com/AskSGH/colorify/wip/signalr/hubs"></script>
+    <script src="signalr/hubs"></script>

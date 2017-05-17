@@ -13,6 +13,7 @@ namespace sDataObject.sElement
         public string systemName { get; set; }
         public string currentCase { get; set; }
         public eSystemCheckType currentCheckType { get; set; }
+        public eASKSGHType asksghType { get; set; }
         public double currentStressThreshold_pascal { get; set; }
         public double currentDeflectionThreshold_mm { get; set; }
         public string systemConnectionID { get; set; }
@@ -33,6 +34,7 @@ namespace sDataObject.sElement
             ns.systemName = this.systemName;
             ns.currentCase = this.currentCase;
             ns.currentCheckType = this.currentCheckType;
+            ns.asksghType = this.asksghType;
             ns.currentDeflectionThreshold_mm = this.currentDeflectionThreshold_mm;
             ns.currentStressThreshold_pascal = this.currentStressThreshold_pascal;
             if(this.systemConnectionID != null) ns.systemConnectionID = this.systemConnectionID;
@@ -50,6 +52,14 @@ namespace sDataObject.sElement
     {
         StrengthCheck = 0,
         StiffnessCheck = 13
+    }
+
+    public enum eASKSGHType
+    {
+        ASKSGH_Colorify_Dyanmic=0,
+        ASKSGH_Colorify_Static=1,
+        ASKSGH_Webify=2,
+        ASKSGH_Gridify=3
     }
 
 
