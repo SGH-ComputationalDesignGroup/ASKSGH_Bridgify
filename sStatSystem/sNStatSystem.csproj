@@ -31,14 +31,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Sawapansolversnet">
-      <HintPath>..\..\..\..\AppData\Roaming\Grasshopper\Libraries\Sawapansolversnet.dll</HintPath>
+    <Reference Include="Sawapansolversnet64">
+      <HintPath>..\..\..\..\AppData\Roaming\Grasshopper\Libraries\Sawapansolversnet64.dll</HintPath>
     </Reference>
     <Reference Include="SawapanStatica">
       <HintPath>..\..\..\..\AppData\Roaming\Grasshopper\Libraries\SawapanStatica.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,12 +50,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="sStatConverter.cs" />
     <Compile Include="sStatSystem.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

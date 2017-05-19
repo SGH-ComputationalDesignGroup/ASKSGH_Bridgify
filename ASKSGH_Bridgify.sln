@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sWebSystem", "sWebSystem\sW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sFEMAP11System", "sFEMAP11System\sFEMAP11System.csproj", "{BF8889BB-E6CD-423A-9015-E19E64181C7D}"
 EndProject
-Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "sAbacusSystem", "sAbacusSystem\sAbacusSystem.pyproj", "{25EA9E73-829D-4FE3-826C-8BE4C7BF6577}"
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "sPyAbacusSystem", "sAbacusSystem\sPyAbacusSystem.pyproj", "{25EA9E73-829D-4FE3-826C-8BE4C7BF6577}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

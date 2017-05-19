@@ -59,7 +59,8 @@ namespace sDataObject.sElement
         ASKSGH_Colorify_Dyanmic=0,
         ASKSGH_Colorify_Static=1,
         ASKSGH_Webify=2,
-        ASKSGH_Gridify=3
+        ASKSGH_Gridify=3,
+        ASKSGH_Graphify = 4
     }
 
 

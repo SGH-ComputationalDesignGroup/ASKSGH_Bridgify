@@ -15,6 +15,8 @@ $(document).ready(function () {
     //stHan.ImportLocalJsonsSystem("testSystem", edgeColor);
     //stHan.ImportLocalJsonsMesh("Test1");
 
+    
+
     stHan.updateFunctions.push(DynamicTest);
     stHan.AninmateScene();
 });
